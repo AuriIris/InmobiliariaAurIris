@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Persona ";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Nueva persona</h1>
+</div>
+<form asp-action="Create" method="post">
+    <label for="Nombre">Nombre</label>
+    <input type="text" id="Nombre" name="Nombre"><br>
+    <label for="Apellido">Apellido</label>
+    <input type="text" id="Apellido" name="Apellido"><br>
+    <label for="Telefono">Telefono</label>
+    <input type="text" id="Telefono" name="Telefono"><br>
+    <label for="Mail">Mail</label>
+    <input type="text" id="Mail" name="Mail"><br>
+    <label for="Dni">Dni</label>
+    <input type="number" id="Dni" name ="Dni"><br>
+    <input type="submit" value="Guardar">
+</form>
