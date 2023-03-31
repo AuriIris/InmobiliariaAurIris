@@ -11,8 +11,9 @@ public class Persona
     public Persona(){
         Nombre="";
     }
-    public Persona(string nombre){
-        Nombre=nombre;
-
-    }
+   public override string ToString()
+		{
+			//return $"{Apellido}, {Nombre}";
+			return $"{Nombre} {Apellido}";
+		}
 }

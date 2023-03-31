@@ -16,4 +16,9 @@ public class Inquilino
         Nombre=nombre;
 
     }
+    public override string ToString()
+		{
+			//return $"{Apellido}, {Nombre}";
+			return $"{Nombre} {Apellido}";
+		}
 }
