@@ -148,7 +148,7 @@ FROM Inmueble i INNER JOIN Propietario p ON i.IdPropietario = p.Id";
                 command.Parameters.AddWithValue("@tipo", inmueble.Tipo); 
                 command.Parameters.AddWithValue("@direccion", inmueble.Direccion); 
                 command.Parameters.AddWithValue("@uso", inmueble.Uso); 
-                command.Parameters.AddWithValue("@cantHab", inmueble.CantHamb); 
+                command.Parameters.AddWithValue("@cantHamb", inmueble.CantHamb); 
                 command.Parameters.AddWithValue("@latitud", inmueble.Latitud); 
                 command.Parameters.AddWithValue("@longitud", inmueble.Longitud); 
                 command.Parameters.AddWithValue("@precio", inmueble.Precio); 

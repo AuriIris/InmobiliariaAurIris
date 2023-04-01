@@ -12,9 +12,10 @@ public class Inmueble
     public Double  Precio { get; set; }
     public String?  Estado { get; set; }
     public int IdPropietario{ get; set; }
-    public Propietario Duenio { get; set;} 
+    public Propietario? Duenio { get; set;} 
 
     public Inmueble()
     {
     }
+
 }

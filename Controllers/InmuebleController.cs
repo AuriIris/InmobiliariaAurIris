@@ -57,7 +57,8 @@ namespace MVC.Controllers
         {
            try
 			{
-				if (ModelState.IsValid)
+				
+                if (ModelState.IsValid)
 				{
 					Repo.Alta(inmueble);
 					TempData["Id"] = inmueble.Id;
@@ -68,6 +69,9 @@ namespace MVC.Controllers
 					ViewBag.Propietarios = repoPropietario.GetPropietarios();
 					return View(inmueble);
 				}
+					
+				
+			
 			}
 			catch (Exception ex)
 			{
