@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 31-03-2023 a las 20:30:02
+-- Tiempo de generación: 02-04-2023 a las 04:59:22
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -29,11 +29,18 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `contrato` (
   `id` int(10) NOT NULL,
-  `fechaD` date NOT NULL,
-  `fechaH` date NOT NULL,
+  `fecDesde` datetime NOT NULL,
+  `fecHasta` datetime NOT NULL,
   `idInquilino` int(10) NOT NULL,
   `idInmueble` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `contrato`
+--
+
+INSERT INTO `contrato` (`id`, `fecDesde`, `fecHasta`, `idInquilino`, `idInmueble`) VALUES
+(1, '2022-03-27 21:22:00', '2023-04-28 21:22:00', 1, 50);
 
 -- --------------------------------------------------------
 
@@ -53,6 +60,13 @@ CREATE TABLE `inmueble` (
   `estado` varchar(15) NOT NULL,
   `idPropietario` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `inmueble`
+--
+
+INSERT INTO `inmueble` (`id`, `tipo`, `direccion`, `uso`, `cantHamb`, `latitud`, `longitud`, `precio`, `estado`, `idPropietario`) VALUES
+(50, 'casa', 'avenida JJFunes', 'casa', 2, '4546456', '321321', 18000, 'libre', 1);
 
 -- --------------------------------------------------------
 
@@ -129,7 +143,7 @@ ALTER TABLE `contrato`
 --
 ALTER TABLE `inmueble`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `idPropietario` (`idPropietario`);
+  ADD KEY `idPropietario` (`idPropietario`);
 
 --
 -- Indices de la tabla `inquilino`
@@ -141,7 +155,8 @@ ALTER TABLE `inquilino`
 -- Indices de la tabla `pago`
 --
 ALTER TABLE `pago`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idContrato` (`idContrato`);
 
 --
 -- Indices de la tabla `propietario`
@@ -157,13 +172,13 @@ ALTER TABLE `propietario`
 -- AUTO_INCREMENT de la tabla `contrato`
 --
 ALTER TABLE `contrato`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `inmueble`
 --
 ALTER TABLE `inmueble`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT de la tabla `inquilino`
@@ -175,7 +190,7 @@ ALTER TABLE `inquilino`
 -- AUTO_INCREMENT de la tabla `pago`
 --
 ALTER TABLE `pago`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `propietario`
@@ -199,6 +214,12 @@ ALTER TABLE `contrato`
 --
 ALTER TABLE `inmueble`
   ADD CONSTRAINT `inmueble_ibfk_1` FOREIGN KEY (`idPropietario`) REFERENCES `propietario` (`id`);
+
+--
+-- Filtros para la tabla `pago`
+--
+ALTER TABLE `pago`
+  ADD CONSTRAINT `pago_ibfk_1` FOREIGN KEY (`idContrato`) REFERENCES `contrato` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
