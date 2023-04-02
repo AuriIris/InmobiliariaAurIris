@@ -20,7 +20,7 @@ public class Inmueble
     public override string ToString()
 		{
 			//return $"{Apellido}, {Nombre}";
-			return $"{Id} {Tipo} {Direccion}";
+			return $"{Tipo} {Direccion}";
 		}
 
 }

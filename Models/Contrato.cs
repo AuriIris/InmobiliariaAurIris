@@ -7,8 +7,11 @@ public class Contrato
 
     public int IdInquilino { get; set; }
 
+    public Inquilino Inquilino1 { get; set; }
+
     public int IdInmueble {get; set;}
 
+    public Inmueble Inmueble1{ get; set; }
     public Contrato()
     {
         

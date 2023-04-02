@@ -43,13 +43,13 @@
                 @Html.DisplayFor(modelItem => item.FecHasta)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdInquilino)
+                @(item.Inquilino1.ToString())
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdInmueble)
+                @(item.Inmueble1.ToString())
             </td>
             <td>
-              @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
+                @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
                 @Html.ActionLink("Detalle", "Details", new { id=item.Id}) |
                 @Html.ActionLink("Eliminar", "Delete", new {id=item.Id})
             </td>

@@ -35,8 +35,8 @@ public class RepositorioContrato
         List<Contrato> contratos = new List<Contrato>();
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            var query = @"SELECT Id, fecDesde,fecHasta,idInquilino,idInmueble
-            from contrato";
+            var query = @"SELECT c.Id, fecDesde,fecHasta,idInquilino,idInmueble,inm.tipo, inm.direccion, inq.nombre, inq.apellido 
+            from contrato c INNER JOIN Inmueble inm INNER JOIN Inquilino inq ON c.idInquilino=inq.id and c.idInmueble=inm.id";
             using (var command = new MySqlCommand(query, connection))
             {
                 connection.Open();
@@ -50,7 +50,19 @@ public class RepositorioContrato
                             FecDesde = reader.GetDateTime(nameof(contrato.FecDesde)),
                             FecHasta = reader.GetDateTime(nameof(contrato.FecHasta)),
                             IdInquilino = reader.GetInt32(nameof(contrato.IdInquilino)),
+                            Inquilino1 = new Inquilino()
+							{
+                                Id = reader.GetInt32(nameof(contrato.IdInquilino)),
+								Nombre = reader.GetString(nameof(contrato.Inquilino1.Nombre)),
+								Apellido = reader.GetString(nameof(contrato.Inquilino1.Apellido)),
+							},
                             IdInmueble = reader.GetInt32(nameof(contrato.IdInmueble)),
+                            Inmueble1 = new Inmueble()
+							{
+                                Id = reader.GetInt32(nameof(contrato.IdInmueble)),
+								Tipo = reader.GetString(nameof(contrato.Inmueble1.Tipo)),
+								Direccion = reader.GetString(nameof(contrato.Inmueble1.Direccion)),
+							}
                             
                             // si fuese fecha seria GetDateTime
                         };
