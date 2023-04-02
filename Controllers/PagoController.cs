@@ -6,39 +6,37 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using mvc.Models;
 using MVC.Models;
-
 namespace MVC.Controllers
 {
-    public class InmuebleController : Controller
-    {   
-        private readonly ReposotorioInmueble Repo;
-        private readonly RepositorioPropietario repoPropietario;
-        public InmuebleController()
+    public class PagoController : Controller
+    {    private readonly RepositorioContrato repoCon;
+        private readonly RepositorioPago repoPago;
+        public PagoController()
         {
-            Repo = new ReposotorioInmueble();
-            repoPropietario = new RepositorioPropietario();
+            repoCon= new RepositorioContrato();
+            repoPago = new RepositorioPago();
         }
-        // GET: Inmueble
+        // GET: Pago
         public ActionResult Index()
         {
-            var lista = Repo.GetInmuebles();
+            var lista = repoPago.GetPagos(); 
         
             return View(lista);
         }
 
-        // GET: Inmueble/Details/5
+        // GET: Pago/Details/5
         public ActionResult Details(int id)
         {
-             var entidad = Repo.GetInmueble(id);
+            var entidad = repoPago.GetPago(id);
             return View(entidad);
         }
 
-        // GET: Inmueble/Create
+        // GET: Pago/Create
         public ActionResult Create()
         {
-           try
+             try
 			{
-				ViewBag.Propietarios = repoPropietario.GetPropietarios();
+				ViewBag.Contratos = repoCon.GetContratos();
 				return View();
 			}
 			catch (Exception ex)
@@ -47,33 +45,30 @@ namespace MVC.Controllers
 			}
         }
 
-        // POST: Inmueble/Create
+        // POST: Pago/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Inmueble inmueble)
+        public ActionResult Create(Pago pago)
         {
-				
+            
                 if (ModelState.IsValid)
 				{
-					Repo.Alta(inmueble);
-					TempData["Id"] = inmueble.Id;
+					repoPago.Alta(pago);
+					TempData["Id"] = pago.Id;
 					return RedirectToAction(nameof(Index));
 				}
 				else
 				{
-					ViewBag.Propietarios = repoPropietario.GetPropietarios();
-					return View(inmueble);
+					ViewBag.Contratos = repoCon.GetContratos();
+					return View(pago);
 				}
-					
-				
-			
         }
 
-        // GET: Inmueble/Edit/5
+        // GET: Pago/Edit/5
         public ActionResult Edit(int id)
         {
-            var entidad = Repo.GetInmueble(id);
-			ViewBag.Propietarios = repoPropietario.GetPropietarios();
+             var entidad = repoPago.GetPago(id);
+			ViewBag.Contratos = repoCon.GetContratos();
 			if (TempData.ContainsKey("Mensaje"))
 				ViewBag.Mensaje = TempData["Mensaje"];
 			if (TempData.ContainsKey("Error"))
@@ -81,38 +76,33 @@ namespace MVC.Controllers
 			return View(entidad);
         }
 
-        // POST: Inmueble/Edit/5
+        // POST: Pago/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Inmueble inmueble)
+        public ActionResult Edit(int id, Pago pago)
         {
-            
-                inmueble.Id = id;
-				Repo.Modificar(inmueble);
+                pago.Id = id;
+				repoPago.Modificar(pago);
 				TempData["Mensaje"] = "Datos guardados correctamente";
 				return RedirectToAction(nameof(Index));
-            
-                
-            }
-        
+        }
 
-        // GET: Inmueble/Delete/5
+        // GET: Pago/Delete/5
         public ActionResult Delete(int id)
         {
-            var entidad = Repo.GetInmueble(id);
+            var entidad = repoPago.GetPago(id);
             return View(entidad);
         }
 
-        // POST: Inmueble/Delete/5
+        // POST: Pago/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Contrato contrato)
+        public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
                 // TODO: Add delete logic here
-
-                Repo.Eliminar(id);
+                repoPago.Eliminar(id);
                 return RedirectToAction(nameof(Index));
             }
             catch

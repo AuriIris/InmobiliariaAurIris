@@ -17,5 +17,10 @@ public class Inmueble
     public Inmueble()
     {
     }
+    public override string ToString()
+		{
+			//return $"{Apellido}, {Nombre}";
+			return $"{Id} {Tipo} {Direccion}";
+		}
 
 }

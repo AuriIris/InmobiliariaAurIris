@@ -29,7 +29,8 @@ public class ReposotorioInmueble
                 command.Parameters.AddWithValue("@idPropietario", inmueble.IdPropietario); 
                 
                 connection.Open();
-                res = Convert.ToInt32(command.ExecuteScalar());
+                int v = Convert.ToInt32(command.ExecuteScalar());
+                res = v;
                 connection.Close();
             }            
         }
@@ -40,8 +41,8 @@ public class ReposotorioInmueble
         List<Inmueble> inmuebles = new List<Inmueble>();
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            var query = @"SELECT i.Id,tipo,direccion,uso,cantHamb,latitud,longitud,precio,estado,idPropietario, p.Nombre, p.Apellido 
-FROM Inmueble i INNER JOIN Propietario p ON i.IdPropietario = p.Id";
+            var query = @"SELECT i.id,tipo,direccion,uso,cantHamb,latitud,longitud,precio,estado,idPropietario, p.nombre, p.apellido 
+FROM Inmueble i INNER JOIN Propietario p ON i.idPropietario = p.id";
             using (var command = new MySqlCommand(query, connection))
             {
                 connection.Open();
@@ -86,9 +87,9 @@ FROM Inmueble i INNER JOIN Propietario p ON i.IdPropietario = p.Id";
 
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            var query = @"SELECT Id,tipo,direccion,uso,cantHamb,latitud,longitud,precio,estado,idPropietario
+            var query = @"SELECT i.id,tipo,direccion,uso,cantHamb,latitud,longitud,precio,estado,idPropietario, p.nombre, p.apellido
             from inmueble  i JOIN Propietario p ON i.idPropietario = p.id
-            WHERE Id = @id";
+            WHERE i.id = @id";
             using (var command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@id", id);
@@ -154,6 +155,7 @@ FROM Inmueble i INNER JOIN Propietario p ON i.IdPropietario = p.Id";
                 command.Parameters.AddWithValue("@precio", inmueble.Precio); 
                 command.Parameters.AddWithValue("@estado", inmueble.Estado); 
                 command.Parameters.AddWithValue("@idPropietario", inmueble.IdPropietario);
+                command.Parameters.AddWithValue("@id", inmueble.Id); 
                 
                 connection.Open();
                 res = Convert.ToInt32(command.ExecuteScalar());

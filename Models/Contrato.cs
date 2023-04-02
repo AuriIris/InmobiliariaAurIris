@@ -13,4 +13,9 @@ public class Contrato
     {
         
     }
+    public override string ToString()
+		{
+			//return $"{Apellido}, {Nombre}";
+			return $"{Id} {FecDesde},   {FecHasta}, {IdInquilino}, {IdInmueble}";    
+		}
 }

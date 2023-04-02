@@ -13,7 +13,7 @@ public class RepositorioContrato
         int res =0;
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            string query = @"INSERT INTO contrato (fecDes,fecHas,idInquilino,idInmueble) 
+            string query = @"INSERT INTO contrato (fecDesde,fecHasta,idInquilino,idInmueble) 
             VALUES (@fecDes,@fecHas,@idInquilino,@idInmueble);
             SELECT LAST_INSERT_ID();" ;
             using (MySqlCommand command = new MySqlCommand(query, connection))
@@ -35,7 +35,7 @@ public class RepositorioContrato
         List<Contrato> contratos = new List<Contrato>();
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            var query = @"SELECT Id, fecDes,fecHas,idInquilino,idInmueble
+            var query = @"SELECT Id, fecDesde,fecHasta,idInquilino,idInmueble
             from contrato";
             using (var command = new MySqlCommand(query, connection))
             {
@@ -71,7 +71,7 @@ public class RepositorioContrato
         try{
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            var query = @"SELECT Id, fecDes,fecHas,idInquilino,idInmueble
+            var query = @"SELECT Id, fecDesde,fecHasta,idInquilino,idInmueble
             from contrato
             WHERE Id = @id";
             using (var command = new MySqlCommand(query, connection))
@@ -110,18 +110,19 @@ public class RepositorioContrato
         {
             string query = @"UPDATE contrato 
             SET 
-                fecDes=@fecDes,
-                fecHas=@fecHas,
+                fecDesde=@fecDesde,
+                fecHasta=@fecHasta,
                 idInquilino=@idInquilino,
                 idInmueble=@idInmueble
                 
             WHERE id=@id" ;
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                command.Parameters.AddWithValue("@fecDes", contrato.FecDesde); 
-                command.Parameters.AddWithValue("@fecHas", contrato.FecHasta); 
+                command.Parameters.AddWithValue("@fecDesde", contrato.FecDesde); 
+                command.Parameters.AddWithValue("@fecHasta", contrato.FecHasta); 
                 command.Parameters.AddWithValue("@idInquilino", contrato.IdInquilino); 
                 command.Parameters.AddWithValue("@idInmueble", contrato.IdInmueble); 
+                command.Parameters.AddWithValue("@id", contrato.Id); 
                 
                 connection.Open();
                 res = Convert.ToInt32(command.ExecuteScalar());
