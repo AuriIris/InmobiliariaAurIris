@@ -37,7 +37,7 @@
 				<select class="form-control" name="IdContrato">
 					@foreach (var item in ltaContratos)
 					{
-						<option value="@item.Id">@(item.ToString())</option>
+						//<option value="@item.Id">@(item.ToString())</option>
                         @:<option @(item.Id==Model.IdContrato ? "selected" : "") value="@item.Id">@(item.Id + " " + item.FecDesde+ " " + item.FecHasta)</option>
 					}
 				</select>

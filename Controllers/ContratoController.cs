@@ -39,16 +39,11 @@ namespace MVC.Controllers
         // GET: Contrato/Create
          public ActionResult Create()
         {
-           try
-			{
+          
 				ViewBag.Inquilinos = repoInq.GetInquilinos();
                 ViewBag.Inmuebles = repoInm.GetInmuebles();
 				return View();
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
+			
         }
 
         // POST: Contrato/Create
@@ -56,18 +51,11 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Contrato contrato)
         {
-           if (ModelState.IsValid)
-				{
+           
 					repoCon.Alta(contrato);
 					TempData["Id"] = contrato.Id;
 					return RedirectToAction(nameof(Index));
-				}
-				else
-				{
-					ViewBag.Inquilinos = repoInq.GetInquilinos();
-                    ViewBag.Inmuebles = repoInm.GetInmuebles();
-					return View(contrato);
-				}
+				
         }
 
         // GET: Contrato/Edit/5

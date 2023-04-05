@@ -62,9 +62,9 @@
 				<select class="form-control" name="IdPropietario">
 					@foreach (var item in ltaPropietarios)
 					{
-						<option value="@item.Id">@(item.ToString())</option>
-                        @:<option @(item.Id==Model.IdPropietario ? "selected" : "") value="@item.Id">@(item.Nombre + " " + item.Apellido)</option>
-					}
+
+                         @:<option @(item.Id==Model.IdPropietario ? "selected" : "") value="@item.Id">@($"{item.Nombre} {item.Apellido}")</option>
+                    }
 				</select>
                 <span asp-validation-for="IdPropietario" class="text-danger"></span>
             <div class="form-group">
