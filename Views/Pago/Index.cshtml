@@ -40,7 +40,7 @@
                 @Html.DisplayFor(modelItem => item.Fecha)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdContrato)
+                @(item.Contrato1.Inquilino1.Nombre+" "+item.Contrato1.Inquilino1.Apellido+" "+ item.Contrato1.Inmueble1.Tipo+" "+item.Contrato1.Inmueble1.Direccion);
             </td>
             <td>
                @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |

@@ -7,6 +7,8 @@ public class Pago
     public double Monto { get; set; }
     public DateTime Fecha { get; set; }
     public int IdContrato { get; set; }
+    public Contrato Contrato1 { get; set; }
+    
 
     public Pago()
     {

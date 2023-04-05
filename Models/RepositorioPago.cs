@@ -30,49 +30,65 @@ public class RepositorioPago
         return res;
     }
     public List<Pago> GetPagos()
+{
+    List<Pago> pagos = new List<Pago>();
+    using (MySqlConnection connection = new MySqlConnection(connectionString))
     {
-        List<Pago> pagos = new List<Pago>();
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        var query = @"SELECT pago.id, pago.fecha, pago.monto,pago.idContrato, contrato.idInmueble, inmueble.tipo, inmueble.direccion, contrato.idInquilino, inquilino.nombre, inquilino.apellido
+                    FROM pago
+                    JOIN contrato ON pago.idContrato = contrato.id
+                    JOIN inmueble ON contrato.idInmueble = inmueble.id
+                    JOIN inquilino ON contrato.idInquilino = inquilino.id;";
+
+        using (var command = new MySqlCommand(query, connection))
         {
-            var query = @"SELECT Id, monto,fecha,idContrato
-            from pago";
-            using (var command = new MySqlCommand(query, connection))
+            connection.Open();
+            using (var reader = command.ExecuteReader())
             {
-                connection.Open();
-                using (var reader = command.ExecuteReader())
+                while (reader.Read())
                 {
-                    while (reader.Read())
+                    Pago pago = new Pago()
                     {
-                        Pago pago = new Pago()
-                        {
-                            Id = reader.GetInt32(nameof(pago.Id)),
-                            Monto = reader.GetDouble(nameof(pago.Monto)),
-                            Fecha = reader.GetDateTime(nameof(pago.Fecha)),
-                            IdContrato = reader.GetInt32(nameof(pago.IdContrato))
-                            
-                            
-                            // si fuese fecha seria GetDateTime
-                        };
-                        pagos.Add(pago);  //  add person  to  list     
+                        Id = reader.GetInt32("id"),
+                        Monto = reader.GetDouble("monto"),
+                        Fecha = reader.GetDateTime("fecha"),
+                        IdContrato = reader.GetInt32("idContrato"),
+                        Contrato1 = new Contrato(){
+                            Id = reader.GetInt32("idContrato"),
+                            Inmueble1= new Inmueble(){
+                                Id = reader.GetInt32("idInmueble"),
+                                Tipo = reader.GetString("tipo"),
+                                Direccion = reader.GetString("direccion"),
 
-                    }
+                            },
+                            Inquilino1= new Inquilino(){
+                                Id = reader.GetInt32("idInquilino"),
+                                Nombre = reader.GetString("nombre"),
+                                Apellido = reader.GetString("apellido")
+                            }
+                            
+                        }
 
+                        
+                    };
+                    pagos.Add(pago);  // add pago to list
                 }
             }
-            connection.Close();
         }
-        return pagos;
+        connection.Close();
     }
-
+    return pagos;
+}
   public Pago GetPago(int id)
     {
         Pago res = null;
         try{
         using (MySqlConnection connection = new MySqlConnection(connectionString))
-        {
-            var query = @"SELECT Id, monto,fecha,idContrato
-            from pago
-            WHERE Id = @id";
+        {   
+
+            var query = @"SELECT pago.Id,pago.fecha, pago.monto,pago.idContrato
+                        FROM pago
+                        ";
             using (var command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@id", id);
