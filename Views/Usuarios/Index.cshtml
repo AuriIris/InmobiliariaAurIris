@@ -1,4 +1,4 @@
-@model IEnumerable<MVC.Models.Usuario>
+@model IEnumerable<MVC.Models.Usuarios>
 
 @{
     ViewData["Title"] = "Index";
@@ -31,9 +31,6 @@
                 @Html.DisplayNameFor(model => model.Avatar)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Rol)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.RolNombre)
             </th>
             <th></th>
@@ -58,18 +55,14 @@
                 @Html.DisplayFor(modelItem => item.Clave)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Avatar)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rol)
+              <img width="32" src="@item.Avatar" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.RolNombre)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Editar", "Edit", new { id=item.Id}) | 
+                @Html.ActionLink("Eliminar", "Delete", new { id=item.Id })
             </td>
         </tr>
 }

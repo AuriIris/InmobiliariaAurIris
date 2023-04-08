@@ -5,12 +5,12 @@ namespace MVC.Models;
 
 public enum enRoles
 {
-    SuperAdministrador = 1,
-    Administrador = 2,
-    Empleado = 3,
+    
+    Administrador = 1,
+    Empleado = 2,
 }
 
-public class Usuario
+public class Usuarios
 {
     [Key]
     [Display(Name = "Código")]
@@ -23,7 +23,7 @@ public class Usuario
     public string Email { get; set; }
     [Required, DataType(DataType.Password)]
     public string Clave { get; set; }
-    public string Avatar { get; set; }
+    public string Avatar { get; set; } // es la ruta donde va a estar guardada la foto, es lo que se garda en la BD
     [NotMapped]//Para EF
     public IFormFile AvatarFile { get; set; }
     //[NotMapped]//Para EF
@@ -32,9 +32,9 @@ public class Usuario
     //public string AvatarFileName { get; set; }
     public int Rol { get; set; }
     [NotMapped]//Para EF
-    public string RolNombre => Rol > 0 ? ((enRoles)Rol).ToString() : "";
+    public string RolNombre => Rol > 0 ? ((enRoles)Rol).ToString() : ""; //deuelve el nombre del id del Rol
 
-    public static IDictionary<int, string> ObtenerRoles()
+    public static IDictionary<int, string> ObtenerRoles() //devuelve la list de los roles
     {
         SortedDictionary<int, string> roles = new SortedDictionary<int, string>();
         Type tipoEnumRol = typeof(enRoles);

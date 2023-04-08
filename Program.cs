@@ -1,4 +1,6 @@
+using Inmobiliaria_.Net_Core.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using mvc.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -22,9 +24,8 @@ builder.Services.AddAuthorization(options =>
 
 
 
-
 var app = builder.Build();
-app.UseAuthentication();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -38,7 +39,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

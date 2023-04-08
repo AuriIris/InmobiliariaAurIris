@@ -38,6 +38,8 @@ namespace MVC.Controllers
         {
            try
 			{
+                ViewBag.Tipos = Inmueble.ObtenerTipo();
+                ViewBag.Usos = Inmueble.ObtenerUso();
 				ViewBag.Propietarios = repoPropietario.GetPropietarios();
 				return View();
 			}
@@ -68,16 +70,17 @@ namespace MVC.Controllers
 				
 			
         }
-
         // GET: Inmueble/Edit/5
         public ActionResult Edit(int id)
         {
             var entidad = Repo.GetInmueble(id);
+            ViewBag.Tipos = Inmueble.ObtenerTipo();
+            ViewBag.Usos = Inmueble.ObtenerUso();
 			ViewBag.Propietarios = repoPropietario.GetPropietarios();
-			if (TempData.ContainsKey("Mensaje"))
-				ViewBag.Mensaje = TempData["Mensaje"];
-			if (TempData.ContainsKey("Error"))
-				ViewBag.Error = TempData["Error"];
+			//if (TempData.ContainsKey("Mensaje"))
+			//	ViewBag.Mensaje = TempData["Mensaje"];
+			//if (TempData.ContainsKey("Error"))
+			//	ViewBag.Error = TempData["Error"];
 			return View(entidad);
         }
 

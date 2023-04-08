@@ -53,9 +53,9 @@ FROM Inmueble i INNER JOIN Propietario p ON i.idPropietario = p.id";
                         Inmueble inmueble = new Inmueble()
                         {
                             Id = reader.GetInt32(nameof(Inmueble.Id)),
-                            Tipo = reader.GetString(nameof(Inmueble.Tipo)),
+                            Tipo = reader.GetInt32(nameof(Inmueble.Tipo)),
                             Direccion = reader.GetString(nameof(Inmueble.Direccion)),
-                            Uso = reader.GetString(nameof(Inmueble.Uso)),
+                            Uso = reader.GetInt32(nameof(Inmueble.Uso)),
                             CantHamb = reader.GetInt32(nameof(Inmueble.CantHamb)),
                             Latitud = reader.GetString(nameof(Inmueble.Latitud)),
                             Longitud = reader.GetString(nameof(Inmueble.Longitud)),
@@ -101,9 +101,9 @@ FROM Inmueble i INNER JOIN Propietario p ON i.idPropietario = p.id";
                        res = new Inmueble()
                         {
                             Id = reader.GetInt32(nameof(Inmueble.Id)),
-                            Tipo = reader.GetString(nameof(Inmueble.Tipo)),
+                            Tipo = reader.GetInt32(nameof(Inmueble.Tipo)),
                             Direccion = reader.GetString(nameof(Inmueble.Direccion)),
-                            Uso = reader.GetString(nameof(Inmueble.Uso)),
+                            Uso = reader.GetInt32(nameof(Inmueble.Uso)),
                             CantHamb = reader.GetInt32(nameof(Inmueble.CantHamb)),
                             Latitud = reader.GetString(nameof(Inmueble.Latitud)),
                             Longitud = reader.GetString(nameof(Inmueble.Longitud)),

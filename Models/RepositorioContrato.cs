@@ -60,7 +60,7 @@ public class RepositorioContrato
                             Inmueble1 = new Inmueble()
 							{
                                 Id = reader.GetInt32(nameof(contrato.IdInmueble)),
-								Tipo = reader.GetString(nameof(contrato.Inmueble1.Tipo)),
+								Tipo = reader.GetInt32(nameof(contrato.Inmueble1.Tipo)),
 								Direccion = reader.GetString(nameof(contrato.Inmueble1.Direccion)),
 							}
                             

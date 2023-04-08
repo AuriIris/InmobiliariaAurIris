@@ -57,7 +57,7 @@ public class RepositorioPago
                             Id = reader.GetInt32("idContrato"),
                             Inmueble1= new Inmueble(){
                                 Id = reader.GetInt32("idInmueble"),
-                                Tipo = reader.GetString("tipo"),
+                                Tipo = reader.GetInt32("tipo"),
                                 Direccion = reader.GetString("direccion"),
 
                             },
