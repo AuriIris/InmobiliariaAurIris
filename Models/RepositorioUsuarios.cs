@@ -24,9 +24,9 @@ namespace mvc.Models;
 			using (MySqlConnection connection = new MySqlConnection(connectionString))
 			{
 				string query = @"INSERT INTO Usuario 
-					(Nombre, Apellido, Avatar, Mmail, Clave, Rol) 
+					(Nombre, Apellido, Avatar, Mail, Clave, Rol) 
 					VALUES (@nombre, @apellido, @avatar, @mail, @clave, @rol);
-					LAST_INSERT_ID para mysql";
+					SELECT LAST_INSERT_ID()";
 				using (MySqlCommand command = new MySqlCommand(query, connection))
 				{
 					command.Parameters.AddWithValue("@nombre", e.Nombre);
@@ -69,33 +69,74 @@ namespace mvc.Models;
 			using (MySqlConnection connection = new MySqlConnection(connectionString))
 			{
 				string query = @"UPDATE Usuario
-					SET Nombre=@nombre, Apellido=@apellido, Avatar=@avatar, Mail=@mail, Clave=@clave, Rol=@rol
-					WHERE Id = @id";
+					SET nombre=@nombre, apellido=@apellido, mail=@mail, rol=@rol
+					WHERE id = @id";
 				using (MySqlCommand command = new MySqlCommand(query, connection))
 				{
 					command.CommandType = CommandType.Text;
 					command.Parameters.AddWithValue("@nombre", e.Nombre);
 					command.Parameters.AddWithValue("@apellido", e.Apellido);
-					command.Parameters.AddWithValue("@avatar", e.Avatar);
 					command.Parameters.AddWithValue("@mail", e.Email);
-					command.Parameters.AddWithValue("@clave", e.Clave);
-					command.Parameters.AddWithValue("@rol", e.Rol);
-					command.Parameters.AddWithValue("@id", e.Id);
+					if (e.Rol !=1)
+					{
+						e.Rol =2;
+					}
+                    command.Parameters.AddWithValue("@rol", e.Rol);
+                	command.Parameters.AddWithValue("@id", e.Id);
 					connection.Open();
-					res = command.ExecuteNonQuery();
+					res = Convert.ToInt32(command.ExecuteScalar());
 					connection.Close();
 				}
 			}
 			return res;
 		}
-
+		public int ModificarClave(Usuarios e)
+		{
+			int res = -1;
+			using (MySqlConnection connection = new MySqlConnection(connectionString))
+			{
+				string query = @"UPDATE Usuario
+					SET Clave=@Clave
+					WHERE id = @id";
+				using (MySqlCommand command = new MySqlCommand(query, connection))
+				{
+					command.CommandType = CommandType.Text;
+					command.Parameters.AddWithValue("@Clave", e.Clave);
+					command.Parameters.AddWithValue("@id", e.Id);
+					connection.Open();
+					res = Convert.ToInt32(command.ExecuteScalar());
+					connection.Close();
+				}
+			}
+			return res;
+		}
+		public int ModificarAvatar(Usuarios e)
+		{
+			int res = -1;
+			using (MySqlConnection connection = new MySqlConnection(connectionString))
+			{
+				string query = @"UPDATE Usuario
+					SET avatar=@avatar
+					WHERE id = @id";
+				using (MySqlCommand command = new MySqlCommand(query, connection))
+				{
+					command.CommandType = CommandType.Text;
+					command.Parameters.AddWithValue("@avatar", e.Avatar);
+					command.Parameters.AddWithValue("@id", e.Id);
+					connection.Open();
+					res = Convert.ToInt32(command.ExecuteScalar());
+					connection.Close();
+				}
+			}
+			return res;
+		}
 		public IList<Usuarios> ObtenerTodos()
 		{
 			IList<Usuarios> res = new List<Usuarios>();
 			using (MySqlConnection connection = new MySqlConnection(connectionString))
 			{
 				string query = @"
-					SELECT Id, Nombre, Apellido, Avatar, mail, Clave, Rol
+					SELECT Id, Nombre, Apellido, Avatar, Mail, Clave, Rol
 					FROM Usuario";
 				using (MySqlCommand command = new MySqlCommand(query, connection))
 				{
@@ -108,7 +149,7 @@ namespace mvc.Models;
 							Id = reader.GetInt32("Id"),
 							Nombre = reader.GetString("Nombre"),
 							Apellido = reader.GetString("Apellido"),
-							Avatar = reader.GetString("Avatar"),
+							Avatar = reader.IsDBNull(reader.GetOrdinal("Avatar")) ? null : reader.GetString("Avatar"),
 							Email = reader.GetString("Mail"),
 							Clave = reader.GetString("Clave"),
 							Rol = reader.GetInt32("Rol"),
@@ -142,7 +183,7 @@ namespace mvc.Models;
 							Id = reader.GetInt32("Id"),
 							Nombre = reader.GetString("Nombre"),
 							Apellido = reader.GetString("Apellido"),
-							Avatar = reader.GetString("Avatar"),
+							Avatar = reader.IsDBNull(reader.GetOrdinal("Avatar")) ? null : reader.GetString("Avatar"),
 							Email = reader.GetString("Mail"),
 							Clave = reader.GetString("Clave"),
 							Rol = reader.GetInt32("Rol"),
@@ -174,7 +215,7 @@ namespace mvc.Models;
 							Id = reader.GetInt32("Id"),
 							Nombre = reader.GetString("Nombre"),
 							Apellido = reader.GetString("Apellido"),
-							Avatar = reader.GetString("Avatar"),
+							Avatar = reader.IsDBNull(reader.GetOrdinal("Avatar")) ? null : reader.GetString("Avatar"),
 							Email = reader.GetString("Mail"),
 							Clave = reader.GetString("Clave"),
 							Rol = reader.GetInt32("Rol"),

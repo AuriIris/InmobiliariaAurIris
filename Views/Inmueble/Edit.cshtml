@@ -2,8 +2,12 @@
 
 @{
     ViewData["Title"] = "Edit";
+    
      var ltaPropietarios = (IList<Propietario>)ViewBag.Propietarios;
 }
+<h1>@ViewBag.Title</h1>
+<h4>@ViewBag.Error</h4>
+<h4>@ViewBag.Mensaje</h4>
 
 <h1>Editar Inmueble</h1>
 

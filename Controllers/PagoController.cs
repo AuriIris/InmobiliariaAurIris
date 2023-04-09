@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using mvc.Models;
@@ -17,6 +18,7 @@ namespace MVC.Controllers
             repoPago = new RepositorioPago();
         }
         // GET: Pago
+        [Authorize]
         public ActionResult Index()
         {
             var lista = repoPago.GetPagos(); 
@@ -25,6 +27,7 @@ namespace MVC.Controllers
         }
 
         // GET: Pago/Details/5
+        [Authorize]
         public ActionResult Details(int id)
         {
             var entidad = repoPago.GetPago(id);
@@ -32,6 +35,7 @@ namespace MVC.Controllers
         }
 
         // GET: Pago/Create
+        [Authorize]
         public ActionResult Create()
         {
              try
@@ -46,8 +50,10 @@ namespace MVC.Controllers
         }
 
         // POST: Pago/Create
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create(Pago pago)
         {
             
@@ -65,6 +71,7 @@ namespace MVC.Controllers
         }
 
         // GET: Pago/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
              var entidad = repoPago.GetPago(id);
@@ -77,8 +84,10 @@ namespace MVC.Controllers
         }
 
         // POST: Pago/Edit/5
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit(int id, Pago pago)
         {
                 pago.Id = id;
@@ -88,6 +97,7 @@ namespace MVC.Controllers
         }
 
         // GET: Pago/Delete/5
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)
         {
             var entidad = repoPago.GetPago(id);
@@ -97,6 +107,7 @@ namespace MVC.Controllers
         // POST: Pago/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+       [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try

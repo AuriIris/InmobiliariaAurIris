@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-04-2023 a las 17:08:10
+-- Tiempo de generación: 09-04-2023 a las 19:53:28
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.0.25
 
@@ -133,9 +133,18 @@ CREATE TABLE `usuario` (
   `apellido` varchar(30) NOT NULL,
   `avatar` varchar(150) DEFAULT NULL,
   `mail` varchar(50) NOT NULL,
-  `clave` varchar(10) NOT NULL,
+  `clave` varchar(300) NOT NULL,
   `rol` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`id`, `nombre`, `apellido`, `avatar`, `mail`, `clave`, `rol`) VALUES
+(8, 'Iris Romina', 'Auriol Lopez', '/Uploads\\avatar_8.jpg', 'auriol.romina@gmail.com', '0nk82mj3YP/H378Oc2qvDhxjk8Cc/gjI9W58PJjTqEY=', 1),
+(15, 'Jessica', 'Auriol ', '/Uploads\\avatar_15.jpg', 'jessica.auriol@gmail.com', '0nk82mj3YP/H378Oc2qvDhxjk8Cc/gjI9W58PJjTqEY=', 2),
+(16, 'Ivan', 'Auriol ', '/Uploads\\avatar_16.jpg', 'ivan.auriol@gmail.com', '0nk82mj3YP/H378Oc2qvDhxjk8Cc/gjI9W58PJjTqEY=', 2);
 
 --
 -- Índices para tablas volcadas
@@ -221,7 +230,7 @@ ALTER TABLE `propietario`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Restricciones para tablas volcadas

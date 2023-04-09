@@ -23,7 +23,7 @@ public class Usuarios
     public string Email { get; set; }
     [Required, DataType(DataType.Password)]
     public string Clave { get; set; }
-    public string Avatar { get; set; } // es la ruta donde va a estar guardada la foto, es lo que se garda en la BD
+    public string? Avatar { get; set; } // es la ruta donde va a estar guardada la foto, es lo que se garda en la BD
     [NotMapped]//Para EF
     public IFormFile AvatarFile { get; set; }
     //[NotMapped]//Para EF

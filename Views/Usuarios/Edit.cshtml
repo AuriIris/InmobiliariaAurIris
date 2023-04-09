@@ -2,74 +2,145 @@
 
 @{
     ViewData["Title"] = "Edit";
+    ViewData["Error"] = "";
+    ViewData["Mensale"] = "";
 }
 
-<h1>Edit</h1>
-
-<h4>Usuarios</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit"  enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
+<div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#datosPersonales">Datos Personales</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#CambiarPass">Cambiar Contraseña</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#CambiarAvatar">Cambiar Avatar</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div id="datosPersonales" class="tab-pane active"><br>
+        <!-- contenido de la solapa "Datos Personales" -->
+            <h4>Usuario</h4>
+            <div class="row">
+                <div class="col-md-4">
+                        <form asp-action="Edit" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Id" class="control-label"></label>
+                                <input asp-for="Id" class="form-control" />
+                                <span asp-validation-for="Id" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Nombre" class="control-label"></label>
+                                <input asp-for="Nombre" class="form-control" />
+                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Apellido" class="control-label"></label>
+                                <input asp-for="Apellido" class="form-control" />
+                                <span asp-validation-for="Apellido" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Email" class="control-label"></label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                           
+                            @if (User.IsInRole("Administrador"))
+                            {
+                                <div class="form-group">
+                                    <label class="control-label">Rol</label>
+                                    <select class="form-control" name="Rol">
+                                        @foreach (var kvp in (IDictionary<int, string>)ViewBag.Roles)
+                                        {
+                                            @:<option @(kvp.Key == Model.Rol ? "selected" : "") value="@kvp.Key">@kvp.Value</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Rol" class="text-danger"></span>
+                                </div>
+                            }
+                            <div class="form-group">
+                                <label asp-for="Avatar" class="control-label"></label><br />
+                                @if (Model.Avatar != "")
+                                {
+                                    <img src="@Model.Avatar" width="150" height="150" />
+                                }
+                                else
+                                {
+                                    <p>Sin avatar</p>
+                                }
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Save" class="btn btn-primary" />
+                            </div>
+                        </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+        <div id="CambiarPass" class="tab-pane"><br>
+        <!-- contenido de la solapa "Cambiar Contraseña" -->
+            <h4>Cambiar contraseña</h4>
+            <hr />
+            <div class="row">
+                <div class="col-md-4">
+                    
+                    <form asp-action="CambiarPass" asp-route-id="@Model.Id" name="CambiarPass">
+                        <input type="hidden" name="IdPropietario" value="@Model.Id" />
+                        <div class="form-group">
+                            <label class="control-label">Clave Antigüa</label>
+                            <input type="password" name="ClaveVieja" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Nueva Clave</label>
+                            <input type="password" name="ClaveNueva" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Repetir Clave Nueva</label>
+                            <input type="password" name="ClaveRepeticion" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Cambiar" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Apellido" class="control-label"></label>
-                <input asp-for="Apellido" class="form-control" />
-                <span asp-validation-for="Apellido" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Clave" class="control-label"></label>
-                <input asp-for="Clave" class="form-control" />
-                <span asp-validation-for="Clave" class="text-danger"></span>
-            </div>
-            @if (User.IsInRole("Administrador"))
-			{
-				<div class="form-group">
-					<label class="control-label">Rol</label>
-					<select class="form-control" name="Rol">
-						@foreach (var kvp in (IDictionary<int, string>)ViewBag.Roles)
-						{
-							@:<option @(kvp.Key == Model.Rol ? "selected" : "") value="@kvp.Key">@kvp.Value</option>
-						}
-					</select>
-					<span asp-validation-for="Rol" class="text-danger"></span>
-				</div>
-			}
-			<div class="form-group">
-				<label asp-for="Avatar" class="control-label"></label><br />
-				@if (Model.Avatar != "")
-				{
-					<img src="@Model.Avatar" />
-				}
-				else
-				{
-					<p>Sin avatar</p>
-				}
-			</div>
-			<div class="form-group">
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+        <div id="CambiarAvatar" class="tab-pane"><br>
+        <!-- contenido de la solapa "Cambiar Avatar" -->
+                <h4>Cambiar Avatar</h4>
+                <hr />
+                <div class="row">
+                    <div class="col-md-4">
+                        <form asp-action="CambiarAvatar" asp-route-id="@Model.Id" name="CambiarAvatar" method="post" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="AvatarFile" class="control-label"></label>
+                                <input asp-for="AvatarFile" type="file" class="form-control" />
+                                <span asp-validation-for="AvatarFile" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Save" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha384-..."></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-..."></script>
+    <script>
+        $(function () {
+            $('.nav-tabs a').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
+        });
+    </script>
+}

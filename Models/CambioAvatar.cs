@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Inmobiliaria_.Net_Core.Models
+{
+	public class CambiarAvatar
+	{
+		[DataType(DataType.Upload)]
+		public IFormFile AvatarFile { get; set; }
+
+		// [Required(ErrorMessage = "El nuevo archivo es requerido")]
+		// [DataType(DataType.ImageUrl)]
+		
+
+	}
+}

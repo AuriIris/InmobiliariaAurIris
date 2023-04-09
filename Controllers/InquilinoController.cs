@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using mvc.Models;
@@ -17,6 +18,7 @@ namespace MVC.Controllers
             Repo = new ReposotorioInquilino();
         }
         // GET: Propietario
+        [Authorize]
         public ActionResult Index()
         {
             var lista = Repo.GetInquilinos();
@@ -24,6 +26,7 @@ namespace MVC.Controllers
         }
 
         // GET: Propietario/Details/5
+        [Authorize]
         public ActionResult Details(int id)
         {
              var entidad = Repo.GetInquilino(id);
@@ -31,6 +34,7 @@ namespace MVC.Controllers
         }
 
         // GET: Propietario/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -39,6 +43,7 @@ namespace MVC.Controllers
         // POST: Propietario/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create(Inquilino  inquilino)
         {
             try
@@ -55,6 +60,7 @@ namespace MVC.Controllers
         }
 
         // GET: Propietario/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
             var entidad = Repo.GetInquilino(id);
@@ -64,6 +70,7 @@ namespace MVC.Controllers
         // POST: Propietario/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit(int id, Inquilino entidad)
         {
             try
@@ -80,6 +87,7 @@ namespace MVC.Controllers
         }
 
         // GET: Propietario/Delete/5
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)
         {
               var entidad = Repo.GetInquilino(id);
@@ -89,6 +97,7 @@ namespace MVC.Controllers
         // POST: Propietario/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+       [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try

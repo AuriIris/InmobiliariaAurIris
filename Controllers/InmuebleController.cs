@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using mvc.Models;
@@ -19,6 +20,7 @@ namespace MVC.Controllers
             repoPropietario = new RepositorioPropietario();
         }
         // GET: Inmueble
+        [Authorize]
         public ActionResult Index()
         {
             var lista = Repo.GetInmuebles();
@@ -27,6 +29,7 @@ namespace MVC.Controllers
         }
 
         // GET: Inmueble/Details/5
+        [Authorize]
         public ActionResult Details(int id)
         {
              var entidad = Repo.GetInmueble(id);
@@ -34,6 +37,7 @@ namespace MVC.Controllers
         }
 
         // GET: Inmueble/Create
+        [Authorize]
         public ActionResult Create()
         {
            try
@@ -52,6 +56,7 @@ namespace MVC.Controllers
         // POST: Inmueble/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create(Inmueble inmueble)
         {
 				
@@ -71,6 +76,7 @@ namespace MVC.Controllers
 			
         }
         // GET: Inmueble/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
             var entidad = Repo.GetInmueble(id);
@@ -87,6 +93,7 @@ namespace MVC.Controllers
         // POST: Inmueble/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit(int id, Inmueble inmueble)
         {
             
@@ -100,6 +107,7 @@ namespace MVC.Controllers
         
 
         // GET: Inmueble/Delete/5
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id)
         {
             var entidad = Repo.GetInmueble(id);
@@ -109,6 +117,7 @@ namespace MVC.Controllers
         // POST: Inmueble/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Administrador")]
         public ActionResult Delete(int id, Contrato contrato)
         {
             try

@@ -16,9 +16,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Identity;
 using mvc.Models;
 using MVC.Models;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Inmobiliaria_.Net_Core.Controllers
 {
@@ -27,17 +29,19 @@ namespace Inmobiliaria_.Net_Core.Controllers
 		private readonly IConfiguration configuration;
 		private readonly IWebHostEnvironment environment;
 		private readonly RepositorioUsuarios repositorio;
-
+	
 		public UsuariosController(IConfiguration configuration, IWebHostEnvironment environment)
 		{
 			this.configuration = configuration;
 			this.environment = environment;
 			repositorio = new RepositorioUsuarios();
 		}
+		
 		// GET: Usuarios
 		[Authorize(Policy = "Administrador")]
 		public ActionResult Index()
 		{
+			ViewData["Title"] = "Indice";
 			var usuarios = repositorio.ObtenerTodos();
 			return View(usuarios);
 		}
@@ -64,10 +68,7 @@ namespace Inmobiliaria_.Net_Core.Controllers
 		[Authorize(Policy = "Administrador")]
 		public ActionResult Create(Usuarios u)
 		{
-			if (!ModelState.IsValid)
-				return View();
-			try
-			{
+			
 				string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
 								password: u.Clave,
 								salt: System.Text.Encoding.ASCII.GetBytes("Super_Secreta_es_la_clave_de_esta_APP_shhh"),
@@ -75,12 +76,16 @@ namespace Inmobiliaria_.Net_Core.Controllers
 								iterationCount: 1000,
 								numBytesRequested: 256 / 8));
 				u.Clave = hashed;
-				//5u.Rol = User.IsInRole("Administrador") ? u.Rol : (int)enRoles.Empleado;
+				//u.Rol = User.IsInRole("Administrador") ? u.Rol : (int)enRoles.Empleado;
 				var nbreRnd = Guid.NewGuid();//posible nombre aleatorio
 				int res = repositorio.Alta(u);
+				// Console.WriteLine("Estoy fuera");
+				// Console.WriteLine(u.AvatarFile);
+				// Console.WriteLine(u.Id);
 				if (u.AvatarFile != null && u.Id > 0)
-				{
+				{ Console.WriteLine("Estoy dentro");
 					string wwwPath = environment.WebRootPath;
+					Console.WriteLine(wwwPath);
 					string path = Path.Combine(wwwPath, "Uploads");
 					if (!Directory.Exists(path))
 					{
@@ -95,15 +100,10 @@ namespace Inmobiliaria_.Net_Core.Controllers
 					{
 						u.AvatarFile.CopyTo(stream);
 					}
-					repositorio.Modificacion(u);
+					repositorio.ModificarAvatar(u);
 				}
 				return RedirectToAction(nameof(Index));
-			}
-			catch (Exception ex)
-			{
-				ViewBag.Roles = Usuarios.ObtenerRoles();
-				return View();
-			}
+			
 		}
 
 		// GET: Usuarios/Edit/5
@@ -133,30 +133,29 @@ namespace Inmobiliaria_.Net_Core.Controllers
 		public ActionResult Edit(int id, Usuarios u)
 		{
 			var vista = nameof(Edit);//de que vista provengo
-			try
-			{
 				if (!User.IsInRole("Administrador"))//no soy admin
 				{
 					vista = nameof(Perfil);//solo puedo ver mi perfil
 					var usuarioActual = repositorio.ObtenerPorEmail(User.Identity.Name);
 					if (usuarioActual.Id != id)//si no es admin, solo puede modificarse él mismo
+					{
 						return RedirectToAction(nameof(Index), "Home");
-				}
+				}}
+				
+				repositorio.Modificacion(u);
+				
 				// TODO: Add update logic here
 
 				return RedirectToAction(vista);
-			}
-			catch (Exception ex)
-			{//colocar breakpoints en la siguiente línea por si algo falla
-				throw;
-			}
+			
 		}
 
 		// GET: Usuarios/Delete/5
 		[Authorize(Policy = "Administrador")]
 		public ActionResult Delete(int id)
 		{
-			return View();
+			var entidad = repositorio.ObtenerPorId(id);
+			return View(entidad);
 		}
 
 		// POST: Usuarios/Delete/5
@@ -171,6 +170,7 @@ namespace Inmobiliaria_.Net_Core.Controllers
 				var ruta = Path.Combine(environment.WebRootPath, "Uploads", $"avatar_{id}" + Path.GetExtension(usuario.Avatar));
 				if (System.IO.File.Exists(ruta))
 					System.IO.File.Delete(ruta);
+					repositorio.Baja(id);
 				return RedirectToAction(nameof(Index));
 			}
 			catch
@@ -330,12 +330,91 @@ namespace Inmobiliaria_.Net_Core.Controllers
 		}
 
 		// GET: /salir
-		[Route("salir", Name = "logout")]
+		[Route("salir", Name = "Logout")]
 		public async Task<ActionResult> Logout()
 		{
 			await HttpContext.SignOutAsync(
 					CookieAuthenticationDefaults.AuthenticationScheme);
 			return RedirectToAction("Index", "Home");
 		}
+		[Route("CambiarPass", Name = "CambiarPass")]
+		public ActionResult CambiarPass(int id, CambioClaveView cambio)
+		{
+			Usuarios u = null;
+			try
+			{
+				// recuperar u original
+				u = repositorio.ObtenerPorId(id);
+				// verificar clave antigüa
+				var pass = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+								password: cambio.ClaveVieja ?? "",
+								salt: System.Text.Encoding.ASCII.GetBytes("Super_Secreta_es_la_clave_de_esta_APP_shhh"),
+								prf: KeyDerivationPrf.HMACSHA1,
+								iterationCount: 1000,
+								numBytesRequested: 256 / 8));
+				if (u.Clave != pass)
+				{
+					TempData["Error"] = "Clave incorrecta";
+					// se rederige porque no hay vista de cambio de pass, está compartida con Edit
+					return RedirectToAction("Edit", new { id = id });
+				}
+				if (ModelState.IsValid)
+				{
+					u.Clave = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+							password: cambio.ClaveNueva,
+							salt: System.Text.Encoding.ASCII.GetBytes("Super_Secreta_es_la_clave_de_esta_APP_shhh"),
+							prf: KeyDerivationPrf.HMACSHA1,
+							iterationCount: 1000,
+							numBytesRequested: 256 / 8));
+					repositorio.ModificarClave(u);
+					TempData["Mensaje"] = "Contraseña actualizada correctamente";
+					return RedirectToAction(nameof(Index));
+				}
+				else//estado inválido
+				{//pasaje de los errores del modelstate a un string en tempData
+					foreach (ModelStateEntry modelState in ViewData.ModelState.Values)
+					{
+						foreach (ModelError error in modelState.Errors)
+						{
+							TempData["Error"] += error.ErrorMessage + "\n";
+						}
+					}
+					return RedirectToAction("Edit", new { id = id });
+				}
+			}
+			catch (Exception ex)
+			{
+				TempData["Error"] = ex.Message;
+				TempData["StackTrace"] = ex.StackTrace;
+				return RedirectToAction("Edit", new { id = id });
+			}
+		}
+		[Route("CambiarAvatar", Name = "CambiarAvatar")]
+		public ActionResult CambiarAvatar(int id, CambiarAvatar cambio)
+		{
+			Usuarios u = repositorio.ObtenerPorId(id);
+			
+			if (u != null &&  u.Id > 0)
+				{ 	u.AvatarFile=cambio.AvatarFile;
+					string wwwPath = environment.WebRootPath;
+					string path = Path.Combine(wwwPath, "Uploads");
+					if (!Directory.Exists(path))
+					{
+						Directory.CreateDirectory(path);
+					}
+					string fileName = "avatar_" + u.Id + Path.GetExtension(u.AvatarFile.FileName);
+					string pathCompleto = Path.Combine(path, fileName);
+					u.Avatar = Path.Combine("/Uploads", fileName);
+					// Esta operación guarda la foto en memoria en la ruta que necesitamos
+					using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
+					{
+						u.AvatarFile.CopyTo(stream);
+					}
+					repositorio.ModificarAvatar(u);
+				}
+			return RedirectToAction("Index", "Usuarios");
+		}
+
+	
 	}
-}
+	}
