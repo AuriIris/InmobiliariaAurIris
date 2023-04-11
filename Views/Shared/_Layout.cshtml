@@ -7,64 +7,69 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MVC.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVC</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        @if (User.Identity.IsAuthenticated)
-				        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-                            @if (User.IsInRole("Administrador"))
-					        {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuario</a>
-                                </li>
-                            }
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Inquilino" asp-action="Index">Inquilino</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Propietario" asp-action="Index">Propietario</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Inmueble" asp-action="Index">Inmueble</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Contrato" asp-action="Index">Contrato</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Pago" asp-action="Index">Pago</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Logout">Salir</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Perfil">Perfil</a>
-                            </li>
-                        }
-                        else
-                        {
-                           <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Login">iniciar Sesion</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </nav>
+    <header class="position-fixed top-0 w-100">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <i class="fa-solid fa-house"></i>
+    <span class="navbar-toggler-icon"></span>
+</button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <li class="nav-item" style="display: flex; align-items: center;">
+                <i class="fa-solid fa-house"></i>
+                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"style="margin-left: 10px;">Home</a>
+            </li>
+            @if (User.IsInRole("Administrador"))
+            {
+                <li class="nav-item"style="display: flex; align-items: center;">
+                    <i class="fa-solid fa-user"></i>
+                    <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index"style="margin-left: 5px;"> Usuarios</a>
+                </li>
+            }
+            <li class="nav-item"style="display: flex; align-items: center;">
+                <i class="fa-solid fa-person"></i>
+                <a class="nav-link" asp-area="" asp-controller="Inquilino" asp-action="Index"style="margin-left: 5px;"> Inquilino</a>
+            </li>
+            <li class="nav-item"style="display: flex; align-items: center;">
+                <i class="fa-solid fa-person"></i>
+                <a class="nav-link" asp-area="" asp-controller="Propietario" asp-action="Index"style="margin-left: 5px;"> Propietario</a>
+            </li>
+            <li class="nav-item"style="display: flex; align-items: center;">
+                <i class="fa-solid fa-sign-hanging"></i>
+                <a class="nav-link" asp-area="" asp-controller="Inmueble" asp-action="Index"style="margin-left: 5px;"> Inmueble</a>
+            </li>
+            <li class="nav-item"style="display: flex; align-items: center;">
+                <i class="fa-solid fa-file-contract"></i>
+                <a class="nav-link" asp-area="" asp-controller="Contrato" asp-action="Index"style="margin-left: 5px;"> Contrato</a>
+            </li>
+            <li class="nav-item"style="display: flex; align-items: center;">
+                <i class="fa-sharp fa-solid fa-file-invoice-dollar"></i>
+                <a class="nav-link" asp-area="" asp-controller="Pago" asp-action="Index"style="margin-left: 5px;"> Pago</a>
+            </li>
+            <li class="nav-item"style="display: flex; align-items: center;">
+                <i class="fa-sharp fa-regular fa-id-card"></i>
+                <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Perfil"style="margin-left: 5px;"> Perfil</a>
+            </li>
+            <li class="nav-item"style="display: flex; align-items: center;">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Logout"style="margin-left: 5px;"> Salir</a>
+            </li>
+            
+        }
+        else
+        {
+            <li class="nav-item">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Login"style="margin-left: 5px;"> Iniciar Sesion</a>
+            </li>
+        }
+    </ul>
+    </div>
+    
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -81,5 +86,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

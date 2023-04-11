@@ -4,10 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Pagos</h1>
 
 <p>
-    <a asp-action="Create">Crear nuevo</a>
+    <div style="display: flex; align-items: center;">
+        <h1 style="margin-right: 15px;">Pagos</h1>
+        <a asp-action="Create"  > <i class="fa-solid fa-user-plus fa-lg" ></i></a>
+    </div>
 </p>
 <table class="table">
     <thead>
@@ -43,9 +45,9 @@
                 @(item.Contrato1.Inquilino1.Nombre+" "+item.Contrato1.Inquilino1.Apellido+" "+ item.Contrato1.Inmueble1.Tipo+" "+item.Contrato1.Inmueble1.Direccion);
             </td>
             <td>
-               @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Detalle", "Details", new { id=item.Id}) |
-                @Html.ActionLink("Eliminar", "Delete", new {id=item.Id})
+               <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-edit"></i></a> | 
+                <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-circle-info"></i></a>| 
+                <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-trash"></i></a>
             </td>
         </tr>
 }

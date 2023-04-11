@@ -4,10 +4,14 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <div style="display: flex; align-items: center;">
+        <h1 style="margin-right: 15px;">Usuarios</h1>
+        <a asp-action="Create"  > <i class="fa-solid fa-user-plus fa-lg" ></i></a>
+    </div>
+   
 </p>
 <table class="table">
     <thead>
@@ -55,8 +59,8 @@
                 @Html.DisplayFor(modelItem => item.RolNombre)
             </td>
             <td>
-                @Html.ActionLink("Editar", "Edit", new { id=item.Id}) | 
-                @Html.ActionLink("Eliminar", "Delete", new { id=item.Id })
+                <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-edit"></i></a> | 
+                <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-trash"></i></a>
             </td>
         </tr>
 }

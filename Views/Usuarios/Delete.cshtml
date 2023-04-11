@@ -61,7 +61,9 @@
     </dl>
     
     <form asp-action="Delete">
-        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a asp-action="Index">Volver</a>
+        <button type="submit" class="btn btn-danger">
+             <i class="fa-solid fa-trash"></i> 
+        </button> |
+        <a href="@Url.Action("Index")" class="btn btn-primary btn-sm"><i class="fa-sharp fa-light fa-arrow-turn-down-left"></i></a>
     </form>
 </div>
