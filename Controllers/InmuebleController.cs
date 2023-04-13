@@ -27,7 +27,28 @@ namespace MVC.Controllers
         
             return View(lista);
         }
+        [Authorize]
+        public ActionResult VerInm(int id)
+        {
+            var lista = Repo.GetInmueblesXProp(id);
+        
+            return View(lista);
+        }
+        [Authorize]
+        public ActionResult Disponibles(DateTime fecha )
+        {
+            var hoy=fecha;
 
+            if(fecha==null){
+                hoy = DateTime.Today;
+            }
+
+            var lista = Repo.GetInmueblesDisponibles(hoy);
+            
+        
+            return View(lista);
+        }
+ 
         // GET: Inmueble/Details/5
         [Authorize]
         public ActionResult Details(int id)
@@ -44,6 +65,7 @@ namespace MVC.Controllers
 			{
                 ViewBag.Tipos = Inmueble.ObtenerTipo();
                 ViewBag.Usos = Inmueble.ObtenerUso();
+                 ViewBag.Estados = Inmueble.ObtenerEstado();
 				ViewBag.Propietarios = repoPropietario.GetPropietarios();
 				return View();
 			}
@@ -82,6 +104,7 @@ namespace MVC.Controllers
             var entidad = Repo.GetInmueble(id);
             ViewBag.Tipos = Inmueble.ObtenerTipo();
             ViewBag.Usos = Inmueble.ObtenerUso();
+            ViewBag.Estados = Inmueble.ObtenerEstado();
 			ViewBag.Propietarios = repoPropietario.GetPropietarios();
 			//if (TempData.ContainsKey("Mensaje"))
 			//	ViewBag.Mensaje = TempData["Mensaje"];

@@ -42,7 +42,7 @@ public class ReposotorioInmueble
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
             var query = @"SELECT i.id,tipo,direccion,uso,cantHamb,latitud,longitud,precio,estado,idPropietario, p.nombre, p.apellido 
-FROM Inmueble i INNER JOIN Propietario p ON i.idPropietario = p.id";
+                FROM Inmueble i INNER JOIN Propietario p ON i.idPropietario = p.id";
             using (var command = new MySqlCommand(query, connection))
             {
                 connection.Open();
@@ -60,7 +60,7 @@ FROM Inmueble i INNER JOIN Propietario p ON i.idPropietario = p.id";
                             Latitud = reader.GetString(nameof(Inmueble.Latitud)),
                             Longitud = reader.GetString(nameof(Inmueble.Longitud)),
                             Precio = reader.GetDouble(nameof(Inmueble.Precio)),
-                            Estado = reader.GetString(nameof(Inmueble.Estado)),
+                            Estado = reader.GetInt32(nameof(Inmueble.Estado)),
                             IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
                             Duenio = new Propietario()
 							{
@@ -108,7 +108,7 @@ FROM Inmueble i INNER JOIN Propietario p ON i.idPropietario = p.id";
                             Latitud = reader.GetString(nameof(Inmueble.Latitud)),
                             Longitud = reader.GetString(nameof(Inmueble.Longitud)),
                             Precio = reader.GetDouble(nameof(Inmueble.Precio)),
-                            Estado = reader.GetString(nameof(Inmueble.Estado)),
+                            Estado = reader.GetInt32(nameof(Inmueble.Estado)),
                             IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
                             Duenio = new Propietario()
 							{
@@ -179,5 +179,192 @@ FROM Inmueble i INNER JOIN Propietario p ON i.idPropietario = p.id";
         }
         return res;
     }
+    public List<Inmueble> GetInmuxEstado(string estado)
+{
+    List<Inmueble> inmuebles = new List<Inmueble>();
+    using (MySqlConnection connection = new MySqlConnection(connectionString))
+    {
+        var query = @"SELECT i.id,tipo,direccion,uso,cantHamb,latitud,longitud,precio,estado,idPropietario, p.nombre, p.apellido 
+            FROM Inmueble i INNER JOIN Propietario p ON i.idPropietario = p.id WHERE estado = @estado";
+        using (var command = new MySqlCommand(query, connection))
+        {
+            command.Parameters.AddWithValue("@estado", estado);
+            connection.Open();
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Inmueble inmueble = new Inmueble()
+                    {
+                        Id = reader.GetInt32(nameof(Inmueble.Id)),
+                        Tipo = reader.GetInt32(nameof(Inmueble.Tipo)),
+                        Direccion = reader.GetString(nameof(Inmueble.Direccion)),
+                        Uso = reader.GetInt32(nameof(Inmueble.Uso)),
+                        CantHamb = reader.GetInt32(nameof(Inmueble.CantHamb)),
+                        Latitud = reader.GetString(nameof(Inmueble.Latitud)),
+                        Longitud = reader.GetString(nameof(Inmueble.Longitud)),
+                        Precio = reader.GetDouble(nameof(Inmueble.Precio)),
+                        Estado = reader.GetInt32(nameof(Inmueble.Estado)),
+                        IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
+                        Duenio = new Propietario()
+                        {
+                            Id = reader.GetInt32(nameof(Inmueble.IdPropietario)),
+                            Nombre = reader.GetString(nameof(Inmueble.Duenio.Nombre)),
+                            Apellido = reader.GetString(nameof(Inmueble.Duenio.Apellido)),
+                        }
+                        // si fuese fecha seria GetDateTime
+                    };
+                    inmuebles.Add(inmueble);  //  add person  to  list     
+
+                }
+
+            }
+        }
+        connection.Close();
+    }
+    return inmuebles;
+}
+    public List<Inmueble> GetInmueblesDisponibles(DateTime fecha)
+    {
+        List<Inmueble> inmueblesDisponibles = new List<Inmueble>();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            var query = @"SELECT i.id, tipo, direccion, uso, cantHamb, latitud, longitud, precio, estado, idPropietario, p.nombre, p.apellido 
+                            FROM Inmueble i 
+                            INNER JOIN Propietario p ON i.idPropietario = p.id 
+                            WHERE i.Estado = 1 AND i.Id NOT IN (
+                                SELECT c.IdInmueble
+                                FROM contrato c
+                                WHERE (c.fecDesde <= @fecha AND c.fecHasta >= @fecha)
+                            )";
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@fecha", fecha);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Inmueble inmueble = new Inmueble()
+                        {
+                            Id = reader.GetInt32(nameof(Inmueble.Id)),
+                        Tipo = reader.GetInt32(nameof(Inmueble.Tipo)),
+                        Direccion = reader.GetString(nameof(Inmueble.Direccion)),
+                        Uso = reader.GetInt32(nameof(Inmueble.Uso)),
+                        CantHamb = reader.GetInt32(nameof(Inmueble.CantHamb)),
+                        Latitud = reader.GetString(nameof(Inmueble.Latitud)),
+                        Longitud = reader.GetString(nameof(Inmueble.Longitud)),
+                        Precio = reader.GetDouble(nameof(Inmueble.Precio)),
+                        Estado = reader.GetInt32(nameof(Inmueble.Estado)),
+                        IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
+                        Duenio = new Propietario()
+                        {
+                            Id = reader.GetInt32(nameof(Inmueble.IdPropietario)),
+                            Nombre = reader.GetString(nameof(Inmueble.Duenio.Nombre)),
+                            Apellido = reader.GetString(nameof(Inmueble.Duenio.Apellido)),
+                        }
+                        };
+                        inmueblesDisponibles.Add(inmueble);
+                    }
+                }
+            }
+        }
+        return inmueblesDisponibles;
+    }
+    public List<Inmueble> GetInmueblesDisp()
+    {
+        List<Inmueble> inmuebles = new List<Inmueble>();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            var query = @"SELECT i.id, tipo, direccion, uso, cantHamb, latitud, longitud, precio, estado, idPropietario, p.nombre, p.apellido 
+                            FROM Inmueble i 
+                            INNER JOIN Propietario p ON i.idPropietario = p.id
+                            WHERE Estado = 1";
+            using (var command = new MySqlCommand(query, connection))
+            {
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Inmueble inmueble = new Inmueble()
+                        {
+                            Id = reader.GetInt32(nameof(Inmueble.Id)),
+                            Tipo = reader.GetInt32(nameof(Inmueble.Tipo)),
+                            Direccion = reader.GetString(nameof(Inmueble.Direccion)),
+                            Uso = reader.GetInt32(nameof(Inmueble.Uso)),
+                            CantHamb = reader.GetInt32(nameof(Inmueble.CantHamb)),
+                            Latitud = reader.GetString(nameof(Inmueble.Latitud)),
+                            Longitud = reader.GetString(nameof(Inmueble.Longitud)),
+                            Precio = reader.GetDouble(nameof(Inmueble.Precio)),
+                            Estado = reader.GetInt32(nameof(Inmueble.Estado)),
+                            IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
+                            Duenio = new Propietario()
+							{
+                                Id = reader.GetInt32(nameof(Inmueble.IdPropietario)),
+								Nombre = reader.GetString(nameof(Inmueble.Duenio.Nombre)),
+								Apellido = reader.GetString(nameof(Inmueble.Duenio.Apellido)),
+							}
+                            // si fuese fecha seria GetDateTime
+                        };
+                        inmuebles.Add(inmueble);  //  add person  to  list     
+
+                    }
+
+                }
+            }
+            connection.Close();
+        }
+        return inmuebles;
+    }
+     public List<Inmueble> GetInmueblesXProp(int Prop)
+    {
+        List<Inmueble> inmuebles = new List<Inmueble>();
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            var query = @"SELECT i.id, tipo, direccion, uso, cantHamb, latitud, longitud, precio, estado, idPropietario, p.nombre, p.apellido 
+                            FROM Inmueble i 
+                            INNER JOIN Propietario p ON i.idPropietario = p.id
+                            WHERE idPropietario = @idPropietario";
+            using (var command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@idPropietario", Prop);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Inmueble inmueble = new Inmueble()
+                        {
+                            Id = reader.GetInt32(nameof(Inmueble.Id)),
+                            Tipo = reader.GetInt32(nameof(Inmueble.Tipo)),
+                            Direccion = reader.GetString(nameof(Inmueble.Direccion)),
+                            Uso = reader.GetInt32(nameof(Inmueble.Uso)),
+                            CantHamb = reader.GetInt32(nameof(Inmueble.CantHamb)),
+                            Latitud = reader.GetString(nameof(Inmueble.Latitud)),
+                            Longitud = reader.GetString(nameof(Inmueble.Longitud)),
+                            Precio = reader.GetDouble(nameof(Inmueble.Precio)),
+                            Estado = reader.GetInt32(nameof(Inmueble.Estado)),
+                            IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
+                            Duenio = new Propietario()
+							{
+                                Id = reader.GetInt32(nameof(Inmueble.IdPropietario)),
+								Nombre = reader.GetString(nameof(Inmueble.Duenio.Nombre)),
+								Apellido = reader.GetString(nameof(Inmueble.Duenio.Apellido)),
+							}
+                            // si fuese fecha seria GetDateTime
+                        };
+                        inmuebles.Add(inmueble);  //  add person  to  list     
+
+                    }
+
+                }
+            }
+            connection.Close();
+        }
+        return inmuebles;
+    }
+
+
 
 }

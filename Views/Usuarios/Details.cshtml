@@ -1,10 +1,10 @@
 @model MVC.Models.Usuarios
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"]=ViewData["Title"];
 }
 
-<h1>Detalle del Usuarios</h1>
+<h1>@ViewData["Title"]</h1>
 
 <div>
     <hr />
@@ -33,29 +33,25 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Email)
         </dd>
+        
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Clave)
+            @Html.DisplayNameFor(model => model.Rol)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Clave)
+            @Html.DisplayFor(model => model.RolNombre)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Avatar)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Avatar)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Rol)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Rol)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RolNombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RolNombre)
+             @if (Model.Avatar != "")
+                {
+                    <img src="@Model.Avatar" width="150" height="150" />
+                }
+            else
+                {
+                    <p>Sin avatar</p>
+                }
         </dd>
     </dl>
 </div>

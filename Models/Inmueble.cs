@@ -18,6 +18,11 @@ public class Inmueble
         Comercial = 1,
         Hogar = 2,
     }
+    public enum enEstado
+    {
+        Disponible = 1,
+        NoDisponible = 2,
+    }
 
     public int Id { get; set; }
     public int  Tipo { get; set; }
@@ -27,7 +32,7 @@ public class Inmueble
     public String?  Latitud { get; set; }
     public String?  Longitud { get; set; }
     public Double  Precio { get; set; }
-    public String?  Estado { get; set; }
+    public int  Estado { get; set; }
     public int IdPropietario{ get; set; }
     public Propietario? Duenio { get; set;} 
 
@@ -62,6 +67,18 @@ public class Inmueble
         foreach (var valor in Enum.GetValues(tipoEnumUso))
         {
             uso.Add((int)valor, Enum.GetName(tipoEnumUso, valor));
+        }
+        return uso;
+    }
+    public string EstadoNombre => Uso > 0 ? ((enEstado)Estado).ToString() : ""; //deuelve el nombre del id del uso
+
+    public static IDictionary<int, string> ObtenerEstado() //devuelve la list de los uso
+    {
+        SortedDictionary<int, string> uso = new SortedDictionary<int, string>();
+        Type tipoEnumEstado = typeof(enEstado);
+        foreach (var valor in Enum.GetValues(tipoEnumEstado))
+        {
+            uso.Add((int)valor, Enum.GetName(tipoEnumEstado, valor));
         }
         return uso;
     }

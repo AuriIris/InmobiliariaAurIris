@@ -5,13 +5,18 @@
 }
 
 
-<p>
-    <div style="display: flex; align-items: center;">
-        <h1 style="margin-right: 15px;">Inmuebles</h1>
-        <a asp-action="Create"  > <i class="fa-solid fa-user-plus fa-lg" ></i></a>
-        <a href="@Url.Action("Disponibles", new { fecha = "null" })" class="btn btn-primary btn-sm">Inmuebles disponibles</a>|
-    </div>
-</p>
+<div style="display: flex; align-items: center;">
+    <h1 style="margin-right: 15px;">Inmuebles</h1>
+    <a asp-action="Create"  > <i class="fa-solid fa-user-plus fa-lg" ></i></a>
+    <a href="@Url.Action("Disponibles")" class="btn btn-primary btn-sm">Inmuebles disponibles</a>|
+</div>
+<form method="post" action="@Url.Action("Disponibles")">
+    <label for="fecha">Fecha </label>
+    <input type="date" id="fecha" name="fecha">
+
+
+    <button type="submit">Buscar</button>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -45,7 +50,8 @@
             <th>
                Propietario
             </th>
-            <th></th>
+            <th>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -85,9 +91,8 @@
                 <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-edit"></i></a> | 
                 <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-circle-info"></i></a>| 
                 <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-trash"></i></a>
-                
-                
-                </td>
+                <a href="@Url.Action("Create", "Contrato", new { id = item.Id })" class="btn btn-primary btn-sm">Crear Contrato</a>
+            </td>
         </tr>
 }
     </tbody>

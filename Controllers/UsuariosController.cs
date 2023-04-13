@@ -50,14 +50,17 @@ namespace Inmobiliaria_.Net_Core.Controllers
 		[Authorize(Policy = "Administrador")]
 		public ActionResult Details(int id)
 		{
+
 			var e = repositorio.ObtenerPorId(id);
 			return View(e);
 		}
+		
 
 		// GET: Usuarios/Create
 		[Authorize(Policy = "Administrador")]
 		public ActionResult Create()
 		{
+			
 			ViewBag.Roles = Usuarios.ObtenerRoles();
 			return View();
 		}
@@ -113,17 +116,26 @@ namespace Inmobiliaria_.Net_Core.Controllers
 			ViewData["Title"] = "Mi perfil";
 			var u = repositorio.ObtenerPorEmail(User.Identity.Name);
 			ViewBag.Roles = Usuarios.ObtenerRoles();
-			return View("Edit", u);
+			return View("Details", u);
 		}
 
 		// GET: Usuarios/Edit/5
-		[Authorize(Policy = "Administrador")]
+		[Authorize]
 		public ActionResult Edit(int id)
 		{
-			ViewData["Title"] = "Editar usuario";
-			var u = repositorio.ObtenerPorId(id);
-			ViewBag.Roles = Usuarios.ObtenerRoles();
-			return View(u);
+			if (User.IsInRole("Administrador")){
+				ViewData["Title"] = "Editar Usuario";
+				var u = repositorio.ObtenerPorId(id);
+				ViewBag.Roles = Usuarios.ObtenerRoles();
+				return View(u);
+			}
+			else
+			{
+				ViewData["Title"] = "Editar Perfil";
+				var u = repositorio.ObtenerPorId(id);
+				ViewBag.Roles = Usuarios.ObtenerRoles();
+				return View(u);
+			}
 		}
 
 		// POST: Usuarios/Edit/5

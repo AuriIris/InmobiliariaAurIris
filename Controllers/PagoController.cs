@@ -57,29 +57,21 @@ namespace MVC.Controllers
         public ActionResult Create(Pago pago)
         {
             
-                if (ModelState.IsValid)
-				{
+                
 					repoPago.Alta(pago);
 					TempData["Id"] = pago.Id;
 					return RedirectToAction(nameof(Index));
-				}
-				else
-				{
-					ViewBag.Contratos = repoCon.GetContratos();
-					return View(pago);
-				}
+				
+					
+			
         }
 
         // GET: Pago/Edit/5
         [Authorize]
         public ActionResult Edit(int id)
         {
-             var entidad = repoPago.GetPago(id);
+            var entidad = repoPago.GetPago(id);
 			ViewBag.Contratos = repoCon.GetContratos();
-			if (TempData.ContainsKey("Mensaje"))
-				ViewBag.Mensaje = TempData["Mensaje"];
-			if (TempData.ContainsKey("Error"))
-				ViewBag.Error = TempData["Error"];
 			return View(entidad);
         }
 

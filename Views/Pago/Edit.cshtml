@@ -38,12 +38,12 @@
 					@foreach (var item in ltaContratos)
 					{
 						//<option value="@item.Id">@(item.ToString())</option>
-                        @:<option @(item.Id==Model.IdContrato ? "selected" : "") value="@item.Id">@(item.Id + " " + item.FecDesde+ " " + item.FecHasta)</option>
+                        @:<option @(item.Id==Model.IdContrato ? "selected" : "") value="@item.Id">@(item.ToString())</option>
 					}
 				</select>
                 <span asp-validation-for="IdContrato" class="text-danger"></span>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
     </div>

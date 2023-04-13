@@ -143,20 +143,21 @@ public class RepositorioContrato
         }
         return res;
     }
-     public int Eliminar(int id ){
-        int res =0;
+    public int Eliminar(int id)
+    {
+        int res = 0;
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            string query = @"DELETE FROM contrato WHERE Id=@id" ;
+            string query = @"DELETE FROM contrato WHERE Id=@id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                command.Parameters.AddWithValue("@id", id); 
+                command.Parameters.AddWithValue("@id", id);
                 connection.Open();
                 res = Convert.ToInt32(command.ExecuteScalar());
                 connection.Close();
-            }            
+            }
         }
         return res;
     }
-
+    
 }

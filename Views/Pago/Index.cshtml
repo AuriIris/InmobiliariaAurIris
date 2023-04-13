@@ -45,7 +45,7 @@
                 @(item.Contrato1.Inquilino1.Nombre+" "+item.Contrato1.Inquilino1.Apellido+" "+ item.Contrato1.Inmueble1.Tipo+" "+item.Contrato1.Inmueble1.Direccion);
             </td>
             <td>
-               <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-edit"></i></a> | 
+               <a href="@Url.Action("Edit", new { id = item.Id , c=""})" class="btn btn-primary btn-sm"><i class="fa-solid fa-edit"></i></a> | 
                 <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-circle-info"></i></a>| 
                 <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-trash"></i></a>
             </td>

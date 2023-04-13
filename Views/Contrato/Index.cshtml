@@ -8,7 +8,8 @@
 <p>
      <div style="display: flex; align-items: center;">
         <h1 style="margin-right: 15px;">Contratos</h1>
-        <a asp-action="Create"  > <i class="fa-solid fa-user-plus fa-lg" ></i></a>
+        <a href="@Url.Action("Create", new { id = "null" })" class="btn btn-primary btn-sm"><i class="fa-solid fa-user-plus fa-lg" ></i></a>
+        
     </div>
 </p>
 <table class="table">
@@ -51,9 +52,14 @@
                 @(item.Inmueble1.ToString())
             </td>
             <td>
-                <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-edit"></i></a> | 
+                <a href="@Url.Action("Edit", new { id = item.Id, a="Null"})" class="btn btn-primary btn-sm"><i class="fa-solid fa-edit"></i></a> | 
                 <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-circle-info"></i></a>| 
-                <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-trash"></i></a>
+                <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-trash"></i></a>|
+                <a href="@Url.Action("Cancelar", new { id = item.Id, a="1" })" class="btn btn-primary btn-sm">Cancelar Contrato</a>|
+                <a href="@Url.Action("Renovar", new { idInq = item.IdInquilino, idInm=item.IdInmueble })" class="btn btn-primary btn-sm">Renovar Contratot</a>
+                
+                
+
                 
             </td>
         </tr>

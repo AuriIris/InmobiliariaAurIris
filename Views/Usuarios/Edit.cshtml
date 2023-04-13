@@ -1,11 +1,13 @@
 @model MVC.Models.Usuarios
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = ViewData["Title"];
     ViewData["Error"] = "";
     ViewData["Mensale"] = "";
 }
 
+<h1>@ViewData["Title"]</h1>
+<br>
 <div class="tabbable">
     <ul class="nav nav-tabs">
         <li class="nav-item">
@@ -21,7 +23,6 @@
     <div class="tab-content">
         <div id="datosPersonales" class="tab-pane active"><br>
         <!-- contenido de la solapa "Datos Personales" -->
-            <h4>Usuario</h4>
             <div class="row">
                 <div class="col-md-4">
                         <form asp-action="Edit" enctype="multipart/form-data">

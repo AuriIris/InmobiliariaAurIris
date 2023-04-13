@@ -1,15 +1,15 @@
 @model MVC.Models.Contrato
-
 @{
-    ViewData["Title"] = "Edit";
+    var titulo = ViewData["Titulo"];
+    var error = ViewData["Error"] as string;
     var ltaInmuebles = (IList<Inmueble>)ViewBag.Inmuebles;
     var ltaInquilinos = (IList<Inquilino>)ViewBag.Inquilinos;
 }
 
-<h1>Edit</h1>
-
-<h4>Contrato</h4>
-<hr />
+<h1>@titulo</h1>
+@if (error != "Null") {
+<h3>@error</h3>}
+<hr /> 
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
@@ -29,11 +29,6 @@
                 <input asp-for="FecHasta" class="form-control" />
                 <span asp-validation-for="FecHasta" class="text-danger"></span>
             </div>
-            @* <div class="form-group">
-                <label asp-for="IdInquilino" class="control-label"></label>
-                <input asp-for="IdInquilino" class="form-control" />
-                <span asp-validation-for="IdInquilino" class="text-danger"></span>
-            </div> *@
             <div class="form-group">
 				<label class="control-label">IdInquilino</label>
 				<select class="form-control" name="IdInquilino">
@@ -44,11 +39,6 @@
 					}
 				</select>
                 <span asp-validation-for="IdInquilino" class="text-danger"></span>
-            @* <div class="form-group">
-                <label asp-for="IdInmueble" class="control-label"></label>
-                <input asp-for="IdInmueble" class="form-control" />
-                <span asp-validation-for="IdInmueble" class="text-danger"></span>
-            </div> *@
             <div class="form-group">
 				<label class="control-label">Inmueble</label>
 				<select class="form-control" name="IdInmueble">
@@ -60,7 +50,7 @@
 				</select>
                 <span asp-validation-for="IdInmueble" class="text-danger"></span>
             <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
+                <input type="submit" value="Confirmar" class="btn btn-primary" />
             </div>
         </form>
     </div>

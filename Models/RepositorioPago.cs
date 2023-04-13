@@ -131,6 +131,7 @@ public class RepositorioPago
             WHERE id=@id" ;
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
+                command.Parameters.AddWithValue("@id", pago.Id); 
                 command.Parameters.AddWithValue("@monto", pago.Monto); 
                 command.Parameters.AddWithValue("@fecha", pago.Fecha); 
                 command.Parameters.AddWithValue("@idContrato", pago.IdContrato); 
