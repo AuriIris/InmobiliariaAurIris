@@ -25,6 +25,13 @@ namespace MVC.Controllers
         
             return View(lista);
         }
+        [Authorize]
+        public ActionResult VerPagos(int idInq)
+        {
+            var lista = repoPago.GetPagosPorContrato(idInq); 
+        
+            return View(lista);
+        }
 
         // GET: Pago/Details/5
         [Authorize]
@@ -38,15 +45,33 @@ namespace MVC.Controllers
         [Authorize]
         public ActionResult Create()
         {
-             try
-			{
-				ViewBag.Contratos = repoCon.GetContratos();
-				return View();
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
+            try
+            {
+                
+                ViewBag.Contratos=repoCon.GetContratos();
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        // GET: Pago/Create
+        [Authorize]
+        public ActionResult Crear(int idContrato)
+        {
+
+            try
+            { 
+                ViewBag.Contratos=repoCon.GetContratos();
+                var entidad= repoCon.GetContrato(idContrato);
+                
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ;
+            }
         }
 
         // POST: Pago/Create

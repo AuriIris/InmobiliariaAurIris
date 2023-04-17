@@ -35,15 +35,16 @@ namespace MVC.Controllers
             return View(lista);
         }
         [Authorize]
-        public ActionResult Disponibles(DateTime fecha )
+        public ActionResult Disponibles(DateTime fechaDesde, DateTime fechaHasta )
         {
-            var hoy=fecha;
+            
 
-            if(fecha==null){
-                hoy = DateTime.Today;
+            if(fechaDesde==null&& fechaHasta==null){
+                fechaDesde = DateTime.Today;
+                fechaHasta = DateTime.Today;
             }
 
-            var lista = Repo.GetInmueblesDisponibles(hoy);
+            var lista = Repo.GetInmueblesDisponibles(fechaDesde,fechaHasta);
             
         
             return View(lista);
@@ -65,7 +66,7 @@ namespace MVC.Controllers
 			{
                 ViewBag.Tipos = Inmueble.ObtenerTipo();
                 ViewBag.Usos = Inmueble.ObtenerUso();
-                 ViewBag.Estados = Inmueble.ObtenerEstado();
+                ViewBag.Estados = Inmueble.ObtenerEstado();
 				ViewBag.Propietarios = repoPropietario.GetPropietarios();
 				return View();
 			}

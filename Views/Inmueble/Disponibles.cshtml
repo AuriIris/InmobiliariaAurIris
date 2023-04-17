@@ -11,8 +11,10 @@
     <a href="@Url.Action("Disponibles")" class="btn btn-primary btn-sm">Inmuebles disponibles</a>|
 </div>
 <form method="post" action="@Url.Action("Disponibles")">
-    <label for="fecha">Fecha </label>
-    <input type="date" id="fecha" name="fecha">
+    <label for="fechaDesde">Fecha Desde </label>
+    <input type="date" id="fechaDesde" name="fechaDesde">
+    <label for="fechaHasta">Fecha Hasta</label>
+    <input type="date" id="fechaHasta" name="fechaHasta">
 
 
     <button type="submit">Buscar</button>

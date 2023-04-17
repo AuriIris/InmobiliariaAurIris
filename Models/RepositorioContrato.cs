@@ -159,5 +159,90 @@ public class RepositorioContrato
         }
         return res;
     }
-    
+
+    public List<Contrato> GetContListarXfecha(DateTime fechaInicio, DateTime fechaFin)
+{
+    List<Contrato> contratos = new List<Contrato>();
+    using (MySqlConnection connection = new MySqlConnection(connectionString))
+    {
+        var query = @"SELECT c.Id, fecDesde, fecHasta, idInquilino, idInmueble, inm.tipo, inm.direccion, inq.nombre, inq.apellido 
+                        FROM contrato c 
+                        INNER JOIN Inmueble inm ON c.idInmueble = inm.id
+                        INNER JOIN Inquilino inq ON c.idInquilino = inq.id
+                        WHERE (fecDesde <= @fechaInicio AND fecHasta >= @fechaInicio) 
+                                 OR (fecDesde <= @fechaFin AND fecHasta >= @fechaFin) 
+                                 OR (fecDesde >= @fechaInicio AND fecHasta <= @fechaFin)
+                       ";
+using (     MySqlCommand command = new MySqlCommand(query, connection))        {
+            command.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+            command.Parameters.AddWithValue("@fechaFin", fechaFin);
+            connection.Open();
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Contrato contrato = new Contrato()
+                    {
+                        Id = reader.GetInt32(nameof(contrato.Id)),
+                        FecDesde = reader.GetDateTime(nameof(contrato.FecDesde)),
+                        FecHasta = reader.GetDateTime(nameof(contrato.FecHasta)),
+                        IdInquilino = reader.GetInt32(nameof(contrato.IdInquilino)),
+                        Inquilino1 = new Inquilino()
+                        {
+                            Id = reader.GetInt32(nameof(contrato.IdInquilino)),
+                            Nombre = reader.GetString(nameof(contrato.Inquilino1.Nombre)),
+                            Apellido = reader.GetString(nameof(contrato.Inquilino1.Apellido)),
+                        },
+                        IdInmueble = reader.GetInt32(nameof(contrato.IdInmueble)),
+                        Inmueble1 = new Inmueble()
+                        {
+                            Id = reader.GetInt32(nameof(contrato.IdInmueble)),
+                            Tipo = reader.GetInt32(nameof(contrato.Inmueble1.Tipo)),
+                            Direccion = reader.GetString(nameof(contrato.Inmueble1.Direccion)),
+                        }
+                    };
+                    contratos.Add(contrato);
+                }
+            }
+        }
+    }
+    return contratos;
+}
+    public List<Contrato> GetContratosPorInmueble(int inmuebleId)
+{
+    List<Contrato> contratos = new List<Contrato>();
+    using (MySqlConnection connection = new MySqlConnection(connectionString))
+    {
+        var query = @"SELECT c.Id, c.fecDesde, c.fecHasta, inq.id AS inquilinoId, inq.nombre AS inquilinoNombre, inq.apellido AS inquilinoApellido 
+                    FROM contrato c 
+                    INNER JOIN Inquilino inq ON c.idInquilino = inq.id 
+                    WHERE c.idInmueble = @inmuebleId;";
+        using (var command = new MySqlCommand(query, connection))
+        {
+            command.Parameters.AddWithValue("@inmuebleId", inmuebleId);
+            connection.Open();
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Contrato contrato = new Contrato()
+                    {
+                        Id = reader.GetInt32(nameof(contrato.Id)),
+                        FecDesde = reader.GetDateTime(nameof(contrato.FecDesde)),
+                        FecHasta = reader.GetDateTime(nameof(contrato.FecHasta)),
+                        IdInquilino = reader.GetInt32("inquilinoId"),
+                        Inquilino1 = new Inquilino()
+                        {
+                            Id = reader.GetInt32("inquilinoId"),
+                            Nombre = reader.GetString("inquilinoNombre"),
+                            Apellido = reader.GetString("inquilinoApellido"),
+                        }
+                    };
+                    contratos.Add(contrato);
+                }
+            }
+        }
+    }
+    return contratos;
+}
 }

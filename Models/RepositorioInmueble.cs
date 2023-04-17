@@ -224,22 +224,23 @@ public class ReposotorioInmueble
     }
     return inmuebles;
 }
-    public List<Inmueble> GetInmueblesDisponibles(DateTime fecha)
+    public List<Inmueble> GetInmueblesDisponibles(DateTime fechaDesde, DateTime fechaHasta)
     {
         List<Inmueble> inmueblesDisponibles = new List<Inmueble>();
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
             var query = @"SELECT i.id, tipo, direccion, uso, cantHamb, latitud, longitud, precio, estado, idPropietario, p.nombre, p.apellido 
-                            FROM Inmueble i 
-                            INNER JOIN Propietario p ON i.idPropietario = p.id 
-                            WHERE i.Estado = 1 AND i.Id NOT IN (
-                                SELECT c.IdInmueble
-                                FROM contrato c
-                                WHERE (c.fecDesde <= @fecha AND c.fecHasta >= @fecha)
-                            )";
+                        FROM Inmueble i 
+                        INNER JOIN Propietario p ON i.idPropietario = p.id 
+                        WHERE i.Estado = 1 AND i.Id NOT IN (
+                            SELECT c.IdInmueble
+                            FROM contrato c
+                            WHERE c.fecDesde <= @fechaHasta AND c.fecHasta >= @fechaDesde
+                        )";
             using (var command = new MySqlCommand(query, connection))
             {
-                command.Parameters.AddWithValue("@fecha", fecha);
+                command.Parameters.AddWithValue("@fechaDesde", fechaDesde);
+                command.Parameters.AddWithValue("@fechaHasta", fechaHasta);
                 connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
@@ -364,6 +365,28 @@ public class ReposotorioInmueble
         }
         return inmuebles;
     }
+    public bool EstaOcupado(int inmuebleId, DateTime fechaInicio, DateTime fechaFin)
+{
+    using (MySqlConnection connection = new MySqlConnection(connectionString))
+    {
+        var query = @"SELECT COUNT(*) 
+                      FROM Contrato 
+                      WHERE idInmueble = @inmuebleId 
+                            AND ((fecDesde <= @fechaInicio AND fecHasta >= @fechaInicio) 
+                                 OR (fecDesde <= @fechaFin AND fecHasta >= @fechaFin) 
+                                 OR (fecDesde >= @fechaInicio AND fecHasta <= @fechaFin))";
+        using (var command = new MySqlCommand(query, connection))
+        {
+            command.Parameters.AddWithValue("@inmuebleId", inmuebleId);
+            command.Parameters.AddWithValue("@fechaInicio", fechaInicio);
+            command.Parameters.AddWithValue("@fechaFin", fechaFin);
+            connection.Open();
+             var result = Convert.ToInt32(command.ExecuteScalar());
+            connection.Close();
+            return result > 0;
+        }
+    }
+}
 
 
 

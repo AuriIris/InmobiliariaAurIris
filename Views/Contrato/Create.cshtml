@@ -3,7 +3,7 @@
 @{
     
     ViewData["Error"] = ViewData["Error"];
-    ViewData["IdInmueble"] = ViewData["IdInmueble"];
+    var inm = ViewData["IdInmueble"];
     var ltaInmuebles = (IList<Inmueble>)ViewBag.Inmuebles;
     var ltaInquilinos = (IList<Inquilino>)ViewBag.Inquilinos;
 }
@@ -26,11 +26,6 @@
                 <input asp-for="FecHasta" class="form-control" />
                 <span asp-validation-for="FecHasta" class="text-danger"></span>
             </div>
-            @* <div class="form-group">
-                <label asp-for="IdInquilino" class="control-label"></label>
-                <input asp-for="IdInquilino" class="form-control" />
-                <span asp-validation-for="IdInquilino" class="text-danger"></span>
-            </div> *@
             <div class="form-group">
 				<label class="control-label">IdInquilino</label>
 				<select class="form-control" name="IdInquilino">
@@ -40,12 +35,7 @@
 					}
 				</select>
                 <span asp-validation-for="IdInquilino" class="text-danger"></span>
-            @* <div class="form-group">
-                <label asp-for="IdInmueble" class="control-label"></label>
-                <input asp-for="IdInmueble" class="form-control" />
-                <span asp-validation-for="IdInmueble" class="text-danger"></span>
-            </div> *@
-           
+            @if(ViewData["IdInmueble"]==null){
                 <div class="form-group">
                     <label class="control-label">Inmueble</label>
                     <select class="form-control" name="IdInmueble">
@@ -56,6 +46,15 @@
                     </select>
                     <span asp-validation-for="IdInmueble" class="text-danger"></span>
                 </div>
+            }else{
+                <select class="form-control" name="IdInmueble">
+					@foreach (var Model in ltaInmuebles)
+					{
+						//<option value="@item.Id">@(item.ToString())</option>
+                        @:<option @(Model.Id==(int)inm? "selected" : "") value="@Model.Id">@(Model.Id + " " + Model.Tipo+" " + Model.Direccion)</option>
+					}
+				</select>
+            }
             <div class="form-group">
                 <input type="submit" value="Crear" class="btn btn-primary" />
             </div>

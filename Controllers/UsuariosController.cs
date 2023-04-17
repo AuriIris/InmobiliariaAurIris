@@ -295,6 +295,7 @@ namespace Inmobiliaria_.Net_Core.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Login(LoginView login)
 		{
+			Console.WriteLine("estoy aca");
 			try
 			{
 				var returnUrl = String.IsNullOrEmpty(TempData["returnUrl"] as string) ? "/Home" : TempData["returnUrl"].ToString();
