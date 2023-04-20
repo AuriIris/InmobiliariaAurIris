@@ -56,7 +56,8 @@
                 <a href="@Url.Action("Edit", new { id = item.Id, a="Null"})" class="btn btn-primary btn-sm"><i class="fa-solid fa-edit"></i></a> | 
                 <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-circle-info"></i></a>| 
                 <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-primary btn-sm"><i class="fa-solid fa-trash"></i></a>|
-                <a href="@Url.Action("Cancelar", new { id = item.Id, a="1" })" class="btn btn-primary btn-sm">Cancelar Contrato</a>|
+                @if (item.ContratoVencido(item)==false){
+                <a href="@Url.Action("Cancelar", new { id = item.Id, a="1" })" class="btn btn-primary btn-sm">Cancelar Contrato</a>}
                 <a href="@Url.Action("Renovar", new { idInq = item.IdInquilino, idInm=item.IdInmueble })" class="btn btn-primary btn-sm">Renovar Contratos</a>
                 <a href="@Url.Action("VerPagos","Pago", new { idInq = item.Id })" class="btn btn-primary btn-sm">Ver Pagos</a>
                 

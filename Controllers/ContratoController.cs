@@ -104,7 +104,7 @@ namespace MVC.Controllers
             else
             {
 
-                if (!repoInm.EstaOcupado(contrato.IdInmueble, contrato.FecDesde, contrato.FecHasta))
+                if (!repoInm.EstaOcupado(contrato.IdInmueble, contrato.FecDesde, contrato.FecHasta, contrato.Id))
                 {
                     ViewData["Error"] = "";
                     repoCon.Alta(contrato);
@@ -197,35 +197,25 @@ namespace MVC.Controllers
         [Authorize]
         public ActionResult Edit(int id, Contrato contrato)
         {
-            
-                if (contrato.FecDesde >= contrato.FecHasta)
-                {
-                    ViewBag.Inquilinos = repoInq.GetInquilinos();
-                    ViewBag.Inmuebles = repoInm.GetInmuebles();
-                    TempData["Error"] = "La fecha de inicio debe ser menor que la fecha de fin.";
-                    return View(contrato);
-                }
-                else
-                {   
-                    if (!repoInm.EstaOcupado(contrato.IdInmueble, contrato.FecDesde, contrato.FecHasta))
-                    {   
-                        TempData["Error"] ="";
-                        contrato.Id = id;
-                        repoCon.Modificar(contrato);
-                        TempData["Mensaje"] = "Datos guardados correctamente";
-                        return RedirectToAction(nameof(Index));
-                    }
-                    else{
 
-                        
-                    ViewBag.Inquilinos = repoInq.GetInquilinos();
-                    ViewBag.Inmuebles = repoInm.GetInmuebles();
-                    TempData["Error"] = "el Inmueble se encuentra ocupado en esas fechas";
-                    return View(contrato);
-                    }
-                }
-                
+            bool inmuebleOcupado = repoInm.EstaOcupado(contrato.IdInmueble, contrato.FecDesde, contrato.FecHasta, contrato.Id);
+
+            if (inmuebleOcupado)
+            {
+                ModelState.AddModelError("IdInmueble", "El inmueble se encuentra ocupado en esas fechas.");
+                ViewBag.Inquilinos = repoInq.GetInquilinos();
+                ViewBag.Inmuebles = repoInm.GetInmuebles();
+                return View(contrato);
+            }
+            else {
+                 contrato.Id = id;
+                    repoCon.Modificar(contrato);
+                    TempData["Mensaje"] = "Datos guardados correctamente";
+                    return RedirectToAction(nameof(Index));
+            }
             
+
+            return View(contrato);
         }
 
         // GET: Contrato/Delete/5

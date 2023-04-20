@@ -22,4 +22,8 @@ public class Contrato
 			//return $"{Id} {FecDesde},   {FecHasta}, {IdInquilino}, {IdInmueble}";
       return $"{Inquilino1.Apellido},{Inquilino1.Nombre},{Inmueble1.Tipo},{Inmueble1.Direccion}";                                                     
 		}
+    public bool ContratoVencido(Contrato contrato)
+{
+    return contrato.FecHasta < DateTime.Today;
+}
 }
