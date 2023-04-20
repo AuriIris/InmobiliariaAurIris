@@ -246,8 +246,5 @@ using (     MySqlCommand command = new MySqlCommand(query, connection))        {
     return contratos;
 
 }
-public bool ContratoVencido(Contrato contrato)
-{
-    return contrato.FecHasta < DateTime.Today;
-}
+
 }
