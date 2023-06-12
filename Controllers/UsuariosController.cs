@@ -74,13 +74,14 @@ namespace Inmobiliaria_.Net_Core.Controllers
 			
 				string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
 								password: u.Clave,
-								salt: System.Text.Encoding.ASCII.GetBytes("Super_Secreta_es_la_clave_de_esta_APP_shhh"),
+								salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
 								prf: KeyDerivationPrf.HMACSHA1,
 								iterationCount: 1000,
 								numBytesRequested: 256 / 8));
 				u.Clave = hashed;
-				//u.Rol = User.IsInRole("Administrador") ? u.Rol : (int)enRoles.Empleado;
-				var nbreRnd = Guid.NewGuid();//posible nombre aleatorio
+				u.Rol = User.IsInRole("Administrador") ? u.Rol : (int)enRoles.Empleado;
+				var nbreRnd = Guid.NewGuid();
+				//posible nombre aleatorio
 				int res = repositorio.Alta(u);
 				// Console.WriteLine("Estoy fuera");
 				// Console.WriteLine(u.AvatarFile);
@@ -303,7 +304,7 @@ namespace Inmobiliaria_.Net_Core.Controllers
 				{
 					string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
 						password: login.Clave,
-						salt: System.Text.Encoding.ASCII.GetBytes("Super_Secreta_es_la_clave_de_esta_APP_shhh"),
+						salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
 						prf: KeyDerivationPrf.HMACSHA1,
 						iterationCount: 1000,
 						numBytesRequested: 256 / 8));
@@ -361,7 +362,7 @@ namespace Inmobiliaria_.Net_Core.Controllers
 				// verificar clave antigüa
 				var pass = Convert.ToBase64String(KeyDerivation.Pbkdf2(
 								password: cambio.ClaveVieja ?? "",
-								salt: System.Text.Encoding.ASCII.GetBytes("Super_Secreta_es_la_clave_de_esta_APP_shhh"),
+								salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
 								prf: KeyDerivationPrf.HMACSHA1,
 								iterationCount: 1000,
 								numBytesRequested: 256 / 8));
@@ -375,7 +376,7 @@ namespace Inmobiliaria_.Net_Core.Controllers
 				{
 					u.Clave = Convert.ToBase64String(KeyDerivation.Pbkdf2(
 							password: cambio.ClaveNueva,
-							salt: System.Text.Encoding.ASCII.GetBytes("Super_Secreta_es_la_clave_de_esta_APP_shhh"),
+							salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
 							prf: KeyDerivationPrf.HMACSHA1,
 							iterationCount: 1000,
 							numBytesRequested: 256 / 8));
